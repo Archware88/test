@@ -6,11 +6,14 @@ import Image from "next/image";
 import Layout from "@/components/GeneralComponents/GeneralLayout";
 import { fetchProfileInfo } from "@/api/student";
 import { updateUserProfile } from "@/api/auth";
-import { IProfileInfo, IUserUpdateData } from "@/types/types";
+import { 
+    // IProfileInfo, 
+    IUserUpdateData 
+} from "@/types/types";
 import { BASE_URL } from "@/api/constants";
 
 const AccountSettings = () => {
-    const [profile, setProfile] = useState<IProfileInfo | null>(null);
+    // const [profile, setProfile] = useState<IProfileInfo | null>(null);
     const [formData, setFormData] = useState<IUserUpdateData>({
         firstname: "",
         lastname: "",
@@ -28,7 +31,7 @@ const AccountSettings = () => {
         const loadProfile = async () => {
             const userInfo = await fetchProfileInfo();
             if (userInfo) {
-                setProfile(userInfo);
+                // setProfile(userInfo);
                 setFormData({
                     firstname: userInfo.firstname || "",
                     lastname: userInfo.lastname || "",

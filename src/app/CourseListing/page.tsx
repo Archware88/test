@@ -92,7 +92,13 @@ const CourseListing = () => {
               <Slider {...sliderSettings} className="mt-4">
                 {purchasedCourses.map((course, index) => (
                   <div key={index} className="p-2">
-                    <PurchasedCard {...course} />
+                    <PurchasedCard
+                      image={course.thumbnail}
+                      authors={[]}
+                      rating={0}
+                      progress={0}
+                      {...course}
+                    />
                   </div>
                 ))}
               </Slider>
@@ -135,7 +141,14 @@ const CourseListing = () => {
             <Slider {...sliderSettings} className="mt-4">
               {trendingCourses.map((course, index) => (
                 <div key={index} className="p-2">
-                  <UnpurchasedCard {...course} />
+                  <UnpurchasedCard
+                    image={course.thumbnail}
+                    authors={[]}
+                    rating={0}
+                    reviews={0}
+                    status="New"
+                    {...course}
+                  />
                 </div>
               ))}
             </Slider>
@@ -159,7 +172,14 @@ const CourseListing = () => {
             <Slider {...sliderSettings} className="mt-4">
               {popularCourses.map((course, index) => (
                 <div key={index} className="p-2">
-                  <UnpurchasedCard {...course} />
+                  <UnpurchasedCard
+                    image={course.thumbnail}
+                    authors={[]}
+                    rating={0}
+                    reviews={0}
+                    status="New"
+                    {...course}
+                  />
                 </div>
               ))}
             </Slider>

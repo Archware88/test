@@ -266,13 +266,13 @@ const Homepages = () => {
                   {courses.map((course) => (
                     <div key={course.id} className="p-4">
                       <UnpurchasedCard
-                        image={course.image}
+                        image={course.image ?? ''}
                         title={course.title}
-                        authors={course.authors}
-                        rating={course.rating}
-                        reviews={course.reviews}
+                        authors={course.authors ?? []}
+                        rating={course.rating ?? 0}
+                        reviews={course.reviews ?? 0}
                         price={course.price}
-                        status={course.status}
+                        status={course.status ?? "New"}
                       />
                     </div>
                   ))}

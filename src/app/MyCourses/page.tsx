@@ -112,7 +112,13 @@ const MyCourses = () => {
                     ) : filteredCourses.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {filteredCourses.map((course) => (
-                                <PurchasedCard key={course.id} {...course} />
+                                <PurchasedCard
+                                    image={course.thumbnail}
+                                    authors={[]}
+                                    rating={0}
+                                    progress={0}
+                                    {...course}
+                                 key={course.id} {...course} />
                             ))}
                         </div>
                     ) : (

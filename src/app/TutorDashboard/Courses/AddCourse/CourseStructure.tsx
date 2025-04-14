@@ -5,7 +5,7 @@ import { createCourseDescription } from "@/api/course-setup"; // Import API help
 
 const CourseStructure = ({
     nextStep,
-    prevStep,
+    // prevStep,
 }: {
     currentStep: number;
     nextStep: () => void;
@@ -46,28 +46,45 @@ const CourseStructure = ({
     const handleSubmit = async () => {
         setLoading(true);
 
-        const payload = {
-            course_id: 1, // Replace with actual course ID
-            course_objective: learningObjectives.filter((obj) => obj.trim() !== ""),
-            course_requirement: prerequisites.filter((req) => req.trim() !== ""),
-            welcome_message: welcomeMessage.trim() || null,
-            congratulations_message: congratulationsMessage.trim() || null,
-        };
+        const formData = new FormData();
+        formData.append("course_id", "1"); // Replace with actual course ID
 
-        console.log("Submitting Data:", payload);
+        // Append each learning objective
+        learningObjectives
+            .filter(obj => obj.trim() !== "")
+            .forEach((obj, index) => {
+                formData.append(`course_objective[${index}]`, obj);
+            });
 
-        const response = await createCourseDescription(payload);
+        // Append each prerequisite
+        prerequisites
+            .filter(req => req.trim() !== "")
+            .forEach((req, index) => {
+                formData.append(`course_requirement[${index}]`, req);
+            });
 
-        if (response?.status) {
-            console.log("Course description added successfully:", response);
-            nextStep(); // Move to the next step if needed
-        } else {
-            console.error("Failed to add course description:", response);
+        if (welcomeMessage.trim()) {
+            formData.append("welcome_message", welcomeMessage.trim());
         }
 
-        setLoading(false);
-    };
+        if (congratulationsMessage.trim()) {
+            formData.append("congratulations_message", congratulationsMessage.trim());
+        }
 
+        console.log("Submitting FormData:", Object.fromEntries(formData.entries()));
+
+        try {
+            const response = await createCourseDescription(formData);
+            if (response?.status) {
+                console.log("Course description added successfully:", response);
+                nextStep();
+            } else {
+                console.error("Failed to add course description:", response);
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
     
 
     return (

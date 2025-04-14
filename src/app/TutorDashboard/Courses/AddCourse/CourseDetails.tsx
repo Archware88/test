@@ -1,10 +1,11 @@
 "use client";
 import { FiPlus, FiX } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createCourseLanding } from "@/api/course-setup";
 import { fetchCategories } from "@/api/courses";
 import { ICategory } from "@/types/types";
 import { FiChevronDown } from "react-icons/fi";
+import Image from "next/image";
 
 const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: number, nextStep: () => void, prevStep: () => void }) => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -18,6 +19,9 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
     const [category, setCategory] = useState("");
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [loadingCategories, setLoadingCategories] = useState(true);
+
+    const imageInputRef = useRef<HTMLInputElement>(null);
+    const videoInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const getCategories = async () => {
@@ -36,7 +40,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         const file = event.target.files?.[0];
         if (file) {
             setSelectedImage(URL.createObjectURL(file));
-            setSelectedFileName(file.name); // Generate preview URL
+            setSelectedFileName(file.name);
         }
     };
 
@@ -44,18 +48,24 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
     const handleVideoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            setSelectedVideo(URL.createObjectURL(file)); // Generate preview URL
+            setSelectedVideo(URL.createObjectURL(file));
         }
     };
 
     // Remove selected image
     const removeImage = () => {
         setSelectedImage(null);
+        if (imageInputRef.current) {
+            imageInputRef.current.value = "";
+        }
     };
 
     // Remove selected video
     const removeVideo = () => {
         setSelectedVideo(null);
+        if (videoInputRef.current) {
+            videoInputRef.current.value = "";
+        }
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -66,19 +76,28 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
             return;
         }
 
-        const payload = {
-            category_id: Number(category), // ✅ Ensure it's a number
-            title,
-            subtitle,
-            taught_in_course: description,
-            course_video_link: selectedVideo ? selectedVideo.name : "",
-            course_level: level,
-        };
+        // Create FormData object
+        const formData = new FormData();
+        formData.append("category_id", category);
+        formData.append("title", title);
+        formData.append("subtitle", subtitle);
+        formData.append("taught_in_course", description);
+        formData.append("course_level", level);
 
-        console.log("Submitting Form Data:", payload); // Debugging
+        // Add the video file if selected
+        if (videoInputRef.current?.files?.[0]) {
+            formData.append("course_video_link", videoInputRef.current.files[0]);
+        }
+
+        // Add the image file if selected
+        if (imageInputRef.current?.files?.[0]) {
+            formData.append("course_image", imageInputRef.current.files[0]);
+        }
+
+        console.log("Submitting Form Data:", Object.fromEntries(formData.entries())); // For debugging
 
         try {
-            const response = await createCourseLanding(payload); // ⬅️ Send JSON instead of FormData
+            const response = await createCourseLanding(formData);
             if (response?.status) {
                 alert("Course created successfully!");
                 nextStep();
@@ -118,7 +137,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                 </div>
 
                 {/* Course Language, Level, Category */}
-                
+
                 <div className="grid grid-cols-3 gap-4 mb-4 mt-8">
                     {/* Course Language */}
                     <div>
@@ -184,8 +203,6 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                     </div>
                 </div>
 
-
-
                 {/* Image Upload */}
                 <div className="mb-6">
                     <label className="block font-semibold mb-2">Course Image</label>
@@ -193,11 +210,11 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                         {/* Image Upload Box */}
                         <div
                             className="relative w-1/2 border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center h-80 cursor-pointer"
-                            onClick={() => document.getElementById("imageUpload")?.click()}
+                            onClick={() => imageInputRef.current?.click()}
                         >
                             {selectedImage ? (
                                 <div className="relative w-full h-full">
-                                    <img src={selectedImage} alt="Selected" className="h-full w-full object-cover rounded-lg" />
+                                    <Image src={selectedImage} alt="Selected Image" className="h-full w-full object-cover rounded-lg" width={100} height={100} />
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -229,7 +246,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
 
                                 {/* Select Photo Button (pushed to end) */}
                                 <button
-                                    onClick={() => document.getElementById("imageUpload")?.click()}
+                                    onClick={() => imageInputRef.current?.click()}
                                     className="ml-auto px-4 py-2 bg-[#1B09A2] text-white rounded text-sm"
                                 >
                                     Select Photo
@@ -239,6 +256,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                             <input
                                 type="file"
                                 id="imageUpload"
+                                ref={imageInputRef}
                                 accept="image/png, image/jpeg, image/gif"
                                 className="hidden"
                                 onChange={handleImageChange}
@@ -247,14 +265,13 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                     </div>
                 </div>
 
-
                 {/* Video Upload */}
                 <div className="mb-6">
                     <label className="block font-semibold mb-2">Promo Video</label>
                     <div className="flex space-x-5">
                         <div
                             className="relative w-1/2 border-2 border-dashed border-gray-400 rounded-lg flex items-center justify-center h-80 cursor-pointer"
-                            onClick={() => document.getElementById("videoUpload")?.click()}
+                            onClick={() => videoInputRef.current?.click()}
                         >
                             {selectedVideo ? (
                                 <div className="relative w-full h-full">
@@ -275,18 +292,19 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                         </div>
                         <div className="w-1/2">
                             <p>
-                                Your promo video is a quick and compelling way for students to preview what they’ll learn in your course.
+                                Your promo video is a quick and compelling way for students to preview what they`&apos;`ll learn in your course.
                                 Students considering your course are more likely to enroll if your promo video is well-made.
                             </p>
                             <input
                                 type="file"
                                 id="videoUpload"
+                                ref={videoInputRef}
                                 accept="video/mp4, video/webm, video/ogg"
                                 className="hidden"
                                 onChange={handleVideoChange}
                             />
                             <button
-                                onClick={() => document.getElementById("videoUpload")?.click()}
+                                onClick={() => videoInputRef.current?.click()}
                                 className="mt-2 px-4 py-2 bg-[#1B09A2] text-white rounded text-sm"
                             >
                                 Upload Video
@@ -306,13 +324,6 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
 
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-[#1B09A2] text-white rounded-lg"
-                    >
-                        Next
-                    </button>
-                    <button
-                        type="button"
-                        onClick={nextStep}
                         className="px-4 py-2 bg-[#1B09A2] text-white rounded-lg"
                     >
                         Next

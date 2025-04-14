@@ -86,7 +86,7 @@ const AddCoursePage = () => {
             <CourseContent currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />
           )}
           {currentStep === 3 && (
-            <PricingReview currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />
+            <PricingReview  />
           )}
         </div>
       </div>

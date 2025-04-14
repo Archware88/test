@@ -84,6 +84,12 @@ export interface ICourse {
   price: number;
   thumbnail: string;
   instructor?: string;
+  rating?: number;
+  image?: string;
+  authors?: string[];
+  reviews?: number;
+  status?: "New" | "Best Seller" | "Top Rated" | "Top Teacher";
+  student_count?: number;
 }
 
 export interface ICategory {
@@ -105,4 +111,5 @@ export interface IUserUpdateData {
   preferredoccupation?: string;
   workexperience?: string;
   education?: string;
+  profile_picture?: string;
 }

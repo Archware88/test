@@ -7,7 +7,7 @@ interface UnpurchasedCardProps {
   authors: string[];
   rating: number;
   reviews: number;
-  price: string;
+  price: number;
   status: "New" | "Best Seller" | "Top Rated" | "Top Teacher"
 }
 

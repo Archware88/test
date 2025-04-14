@@ -98,9 +98,9 @@ const InstructorPage = () => {
                                 key={index}
                                 title={course.title}
                                 status={course.status as "Draft" | "Live" | "In Review"}
-                                students={course.students_count || 0} // Adjust based on backend data
+                                students={course.student_count || 0} // Adjust based on backend data
                                 rating={course.rating || 0} // Adjust based on backend data
-                                reviews={course.reviews?.length || 0} // Adjust based on backend data
+                                reviews={Array.isArray(course.reviews) ? course.reviews.length : course.reviews || 0} // Adjust based on backend data
                             />
                         ))
                     ) : (

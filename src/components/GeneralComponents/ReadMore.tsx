@@ -18,32 +18,16 @@ const ReadMore: React.FC<ReadMoreProps> = ({
     const getWordCount = (str: string) =>
         str.replace(/<[^>]+>/g, "").trim().split(/\s+/).length;
 
+    // Basic truncate function (preserves text, strips tags after limit)
     const truncateHTML = (html: string, limit: number): string => {
-        const div = document.createElement("div");
-        div.innerHTML = html;
-        const words: string[] = [];
-        const traverse = (node: Node): string => {
-            if (words.length >= limit) return "";
-            if (node.nodeType === Node.TEXT_NODE) {
-                const nodeWords = node.textContent?.trim().split(/\s+/) || [];
-                const needed = limit - words.length;
-                const slice = nodeWords.slice(0, needed);
-                words.push(...slice);
-                return slice.join(" ");
-            } else if (node.nodeType === Node.ELEMENT_NODE) {
-                const tag = (node as Element).tagName.toLowerCase();
-                const children = Array.from(node.childNodes)
-                    .map(traverse)
-                    .join("");
-                return `<${tag}>${children}</${tag}>`;
-            }
-            return "";
-        };
-        return traverse(div);
+        const textContent = html.replace(/<[^>]+>/g, "").trim();
+        const words = textContent.split(/\s+/);
+        const truncated = words.slice(0, limit).join(" ");
+        return truncated;
     };
 
-    const isTruncated = useMemo(() => getWordCount(html) > wordLimit, [html]);
-    const previewHtml = useMemo(() => truncateHTML(html, wordLimit), [html]);
+    const isTruncated = useMemo(() => getWordCount(html) > wordLimit, [html, wordLimit]);
+    const previewHtml = useMemo(() => truncateHTML(html, wordLimit), [html, wordLimit]);
 
     return (
         <div className={className}>
@@ -57,7 +41,9 @@ const ReadMore: React.FC<ReadMoreProps> = ({
                 >
                     <div
                         dangerouslySetInnerHTML={{
-                            __html: expanded || !isTruncated ? html : previewHtml + "...",
+                            __html: expanded || !isTruncated
+                                ? html
+                                : previewHtml + "...",
                         }}
                     />
                 </motion.div>
