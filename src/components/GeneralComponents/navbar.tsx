@@ -9,15 +9,21 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
+  const [authDefaultStep, setAuthDefaultStep] = useState<"login" | "signup">("login");
+
+  const openSignupModal = () => {
+    setAuthDefaultStep("signup");
+    setShowAuth(true);
+  };
 
   return (
     <div className="fixed top-0 left-0 right-0 z-20">
       <div className="bg-gray-100 py-4 px-6 flex items-center justify-between w-full relative border-b border-gray-300">
         {/* Mobile View */}
         <div
-          className={`md:hidden flex items-center w-full ${
-            menuOpen ? "justify-start" : "justify-between"
-          }`}
+          className={`md:hidden flex items-center w-full ${menuOpen ? "justify-start" : "justify-between"
+            }`}
         >
           {/* Hamburger Menu */}
           <button
@@ -93,10 +99,10 @@ const Navbar = () => {
 
             {/* Top Links */}
             <div className="flex flex-col space-y-8 mt-12 px-6">
-            <Link href="/explore-categories" className="px-3 text-[#0A1532]">
+              <Link href="/AllCourses" className="px-3 text-[#0A1532]">
                 Explore Categories
               </Link>
-                          <div className="w-full border-b border-gray-300 text-[#0A1532]"></div>
+              <div className="w-full border-b border-gray-300 text-[#0A1532]"></div>
               <Link href="/Tutor/Home" className="px-3">
                 Become a Tutor
               </Link>
@@ -109,12 +115,12 @@ const Navbar = () => {
 
             {/* Bottom Links */}
             <div className="flex flex-col items-center space-y-4 mt-auto mb-6 px-6">
-              <Link
-                href="/get-started"
+              <button
+                onClick={openSignupModal}
                 className="bg-[#1B09A2] border border-[#1B09A2] text-white py-2 px-6 rounded-lg w-full text-center"
               >
                 Get Started
-              </Link>
+              </button>
               <button
                 onClick={() => setIsAuthOpen(true)}
                 className="border-2 border-[#1B09A2] text-[#1B09A2] py-2 px-6 rounded-lg w-full text-center"
@@ -153,10 +159,10 @@ const Navbar = () => {
 
           {/* Navigation Links */}
           <div className="flex items-center space-x-6">
-                      <Link href="/explore-categories" className="text-[#0A1532]">
+            <Link href="/AllCourses" className="text-[#0A1532]">
               Explore Categories
             </Link>
-                      <Link href="/Tutor/Home" className="text-[#0A1532]">
+            <Link href="/Tutor/Home" className="text-[#0A1532]">
               Become a Tutor
             </Link>
           </div>
@@ -169,12 +175,12 @@ const Navbar = () => {
             >
               Login
             </button>
-            <Link
-              href="/get-started"
+            <button
+              onClick={openSignupModal}
               className="bg-[#1B09A2] border-2 border-[#1B09A2] text-sm text-white py-2 px-4 rounded-lg ml-4"
             >
               Get Started
-            </Link>
+            </button>
           </div>
         </div>
         {/* Mobile Search Bar (Toggles Open) */}
@@ -190,6 +196,12 @@ const Navbar = () => {
         )}
         {/* Login Modal */}
         {isAuthOpen && <AuthContainer onClose={() => setIsAuthOpen(false)} />}
+        {showAuth && (
+          <AuthContainer
+            onClose={() => setShowAuth(false)}
+            defaultStep={authDefaultStep}
+          />
+        )}
       </div>
     </div>
   );

@@ -172,7 +172,7 @@ const UserNavbar = () => {
       {menuOpen && (
         <div className="md:hidden absolute top-16 left-0 w-full bg-white shadow-lg border-t border-gray-300 z-50">
           <div className="p-4 flex flex-col space-y-3">
-            <a href="#" className="text-gray-600 hover:text-blue-600">Explore Categories</a>
+            <a href="/AllCourses" className="text-gray-600 hover:text-blue-600">Explore Categories</a>
             <a href="/Tutor/Home" className="text-gray-600 hover:text-blue-600">Become a Tutor</a>
             <hr />
             <a href="#" className="text-gray-600 hover:text-blue-600">My Courses</a>

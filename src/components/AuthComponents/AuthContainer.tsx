@@ -5,10 +5,11 @@ import SignupModal from "./Signup";
 // Define Props Type
 interface AuthContainerProps {
   onClose: () => void;
+  defaultStep?: "login" | "signup"; 
 }
 
-const AuthContainer: React.FC<AuthContainerProps> = ({ onClose }) => {
-  const [authStep, setAuthStep] = useState<"login" | "signup">("login");
+const AuthContainer: React.FC<AuthContainerProps> = ({ onClose, defaultStep = "login" }) => {
+  const [authStep, setAuthStep] = useState<"login" | "signup">(defaultStep);
 
   console.log("Current auth step:", authStep);
 

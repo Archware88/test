@@ -17,6 +17,8 @@ import { ICategory, ICourse } from "@/types/types";
 import FeaturesGrid from "@/components/HomeComponents/FeatureGrid";
 import Footer from "@/components/GeneralComponents/Footer";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+import Link from "next/link";
+import AuthContainer from "@/components/AuthComponents/AuthContainer";
 
 const settings = {
   dots: false,
@@ -93,6 +95,7 @@ const Homepages = () => {
   const [courses, setCourses] = useState<ICourse[]>([]);
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [loadingCourses, setLoadingCourses] = useState<boolean>(true);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   // Fetch categories when the component mounts
   useEffect(() => {
@@ -151,10 +154,10 @@ const Homepages = () => {
               </div>
               <h1 className="lg:text-4xl text-[27px] text-[#333] mt-4 font-medium lg:leading-14">
                 Empowering{" "}
-                <span className="text-[#88D613]">young Africans</span> 
+                <span className="text-[#88D613]">young Africans</span>
                 {" "}with {" "}
                 <span className="text-[#88D613]">skills</span> for the future
-                
+
               </h1>
               <p className=" text-[#666] mt-5 text-sm lg:text-base text-justify">
                 Master a specific skill to enhance your business operations,
@@ -162,20 +165,18 @@ const Homepages = () => {
                 expertise, or stay updated with industry trends.
               </p>
               <div className="lg:mt-15 mt-8">
-                <a
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
+                <Link
+                  href="/AllCourses"
                   className="bg-[#1B09A2] text-sm text-white px-3 py-3 rounded-md mr-5"
                 >
                   Browse Courses
-                </a>
-                <a
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
+                </Link>
+                <button
+                  onClick={() => setIsAuthOpen(true)}
                   className="border-2 border-[#002d72] text-sm text-[#002d72] px-10  py-2.5 rounded-md"
                 >
                   Login
-                </a>
+                </button>
               </div>
             </div>
             <div>
@@ -220,7 +221,7 @@ const Homepages = () => {
               At Archware Institute, we provide you with the knowledge and tools
               needed to thrive in the ever-evolving tech industry.
             </p>
-            <FeaturesGrid/>
+            <FeaturesGrid />
           </div>
 
           {/* Featured Courses */}
@@ -241,7 +242,7 @@ const Homepages = () => {
                 >
                   All
                 </button>
-           
+
                 {loadingCategories ? (
                   <p>Loading categories...</p>
                 ) : (
@@ -300,9 +301,9 @@ const Homepages = () => {
                 lives of learners worldwide!
               </p>
               <div className="lg:block flex justify-center">
-              <button className="px-6 py-3 lg:text-base text-sm border border-white rounded transition-all duration-300 hover:bg-white hover:text-[#1F3F95]">
-                Become a Tutor
-              </button>
+                <Link href="/Tutor/Home" className="px-6 py-3 lg:text-base text-sm border border-white rounded transition-all duration-300 hover:bg-white hover:text-[#1F3F95]">
+                  Become a Tutor
+                </Link>
               </div>
             </div>
             <div className="lg:w-1/2 w-full lg:mt-0 mt-12 flex justify-center">
@@ -343,9 +344,9 @@ const Homepages = () => {
           </section>
 
           {/* <Footer /> */}
-          <Footer/>
+          <Footer />
         </div>
-
+        {isAuthOpen && <AuthContainer onClose={() => setIsAuthOpen(false)} />}
       </Layout>
     </>
   );

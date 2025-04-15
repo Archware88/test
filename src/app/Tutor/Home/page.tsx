@@ -4,6 +4,8 @@ import { useState } from "react";
 import React from "react";
 import Navbar from "@/components/GeneralComponents/navbar";
 import Footer from "@/components/GeneralComponents/Footer";
+// import Link from "next/link";
+import AuthContainer from "@/components/AuthComponents/AuthContainer";
 
 const faqs = [
     { question: "What is Archware Institute?", answer: "Archware Institute is an online learning platform offering courses in various disciplines to help learners grow their skills." },
@@ -21,6 +23,14 @@ const TeachPage = () => {
 
     const toggleFAQ = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
+    };
+
+    const [showAuth, setShowAuth] = useState(false);
+    const [authDefaultStep, setAuthDefaultStep] = useState<"login" | "signup">("login");
+
+    const openSignupModal = () => {
+        setAuthDefaultStep("signup");
+        setShowAuth(true);
     };
 
     return (
@@ -53,9 +63,12 @@ const TeachPage = () => {
                         article, which will guide you through the sign-up process.
                     </p>
 
-                    <button className="mt-3 text-white px-6 py-2 rounded-md hover:brightness-110"
-                        style={{ backgroundColor: '#88D613' }}>
-                        Become a Tutor
+                    <button
+                        onClick={openSignupModal}>
+                        <div className="mt-3 text-white px-6 py-2 rounded-md hover:brightness-110"
+                            style={{ backgroundColor: '#88D613' }}>
+                            Become a Tutor
+                        </div>
                     </button>
                 </div>
             </section>
@@ -187,8 +200,11 @@ const TeachPage = () => {
 
                 {/* Button */}
                 <div className="mt-10">
-                    <button className="bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-green-600 transition">
-                        Become a Tutor
+                    <button
+                        onClick={openSignupModal} className="bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-green-600 transition">
+                        <>
+                            Become a Tutor
+                        </>
                     </button>
                 </div>
             </section>
@@ -219,7 +235,12 @@ const TeachPage = () => {
             </section>
 
             <Footer />
-
+            {showAuth && (
+                <AuthContainer
+                    onClose={() => setShowAuth(false)}
+                    defaultStep={authDefaultStep}
+                />
+            )}
 
         </div>
 

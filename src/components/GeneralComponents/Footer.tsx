@@ -17,7 +17,7 @@ const Footer = () => {
                         <ul className="space-y-2 text-gray-800">
                             <h4 className="font-semibold text-[16px] mb-3">Our Company</h4>
                             <li><a href="#" className="hover:underline text-[black]">All courses</a></li>
-                            <li><a href="#" className="hover:underline text-[black]">Become a tutor</a></li>
+                            <li><a href="/Tutor/Home" className="hover:underline text-[black]">Become a tutor</a></li>
                             <li><a href="#" className="hover:underline text-[black]">Contact Us</a></li>
                         </ul>
                     </div>

@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import AuthLayout from "@/components/GeneralComponents/AuthLayout";
 import Image from "next/image";
 import SkeletonLoader from "@/components/GeneralComponents/SkeletonLoader";
+import Link from "next/link";
 
 const CourseListing = () => {
   const [purchasedCourses, setPurchasedCourses] = useState<ICourse[] | null>(
@@ -118,9 +119,11 @@ const CourseListing = () => {
                   Join thousands of learners who are unlocking new careers and
                   shaping their future.
                 </p>
-                <button className="mt-4 text-white py-2 px-6 rounded-lg font-semibold bg-[#1B09A2]">
-                  Browse Courses
-                </button>
+                <Link href="/AllCourses">
+                  <a className="mt-4 text-white py-2 px-6 rounded-lg font-semibold bg-[#1B09A2]">
+                    Browse Courses
+                  </a>
+                </Link>
               </div>
             </div>
           )}
