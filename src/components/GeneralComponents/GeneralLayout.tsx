@@ -1,4 +1,4 @@
-import Navbar from "@/components/GeneralComponents/navbar";
+import Navbar from "./NavbarState";
 // import Footer from "@/components/Footer";
 import { ReactNode } from "react";
 

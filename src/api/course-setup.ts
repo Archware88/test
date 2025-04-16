@@ -104,3 +104,29 @@ export const createCourseMessages = async (
     return null;
   }
 };
+
+interface CourseSetupDoneResponse {
+  status: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+}
+
+interface CourseSetupPayload {
+  course_id: number;
+  completed_status: boolean;
+}
+
+export const markCourseSetupDone = async (
+  payload: CourseSetupPayload
+): Promise<CourseSetupDoneResponse | null> => {
+  try {
+    const response = await post<CourseSetupDoneResponse>(
+      "/course-setup-done",
+      payload
+    );
+    return response;
+  } catch (error) {
+    console.error("Error marking course setup as done:", error);
+    return null;
+  }
+};

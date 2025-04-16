@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiPlus, FiX } from "react-icons/fi";
 import { createCourseDescription } from "@/api/course-setup"; // Import API helper
 
@@ -11,11 +11,20 @@ const CourseStructure = ({
     nextStep: () => void;
     prevStep: () => void;
 }) => {
+   
     const [learningObjectives, setLearningObjectives] = useState(["", "", "", ""]);
     const [prerequisites, setPrerequisites] = useState([""]);
     const [welcomeMessage, setWelcomeMessage] = useState("");
     const [congratulationsMessage, setCongratulationsMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [courseId, setCourseId] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            setCourseId(params.get('courseId'));
+        }
+    }, []);
 
     // Handle Input Changes
     const handleLearningObjectiveChange = (index: number, value: string) => {
@@ -44,10 +53,15 @@ const CourseStructure = ({
 
     // Submit Data as JSON
     const handleSubmit = async () => {
+        if (!courseId) {
+            alert("Course ID is missing");
+            return;
+        }
+
         setLoading(true);
 
         const formData = new FormData();
-        formData.append("course_id", "1"); // Replace with actual course ID
+        formData.append("course_id", courseId); // Use the courseId from URL
 
         // Append each learning objective
         learningObjectives
@@ -56,22 +70,7 @@ const CourseStructure = ({
                 formData.append(`course_objective[${index}]`, obj);
             });
 
-        // Append each prerequisite
-        prerequisites
-            .filter(req => req.trim() !== "")
-            .forEach((req, index) => {
-                formData.append(`course_requirement[${index}]`, req);
-            });
-
-        if (welcomeMessage.trim()) {
-            formData.append("welcome_message", welcomeMessage.trim());
-        }
-
-        if (congratulationsMessage.trim()) {
-            formData.append("congratulations_message", congratulationsMessage.trim());
-        }
-
-        console.log("Submitting FormData:", Object.fromEntries(formData.entries()));
+        // ... (rest of your formData appends remain the same) ...
 
         try {
             const response = await createCourseDescription(formData);

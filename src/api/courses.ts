@@ -1,5 +1,5 @@
 import { get } from "./api";
-import { ICourse, ICategory } from "../types/types";
+import { ICourse, ICategory, ICourseDetailsResponse } from "../types/types";
 
 export const fetchStudentCourses = async (): Promise<ICourse[] | null> => {
   try {
@@ -51,10 +51,17 @@ export const fetchCoursesByCategory = async (
   categoryId: number
 ): Promise<ICourse[] | null> => {
   try {
-    const response = await get<{ courses: ICourse[] }>(
-      `/get-courses-in-category/${categoryId}`
-    );
-    return response.courses ?? null;
+    const response = await get<{
+      courses: {
+        data: ICourse[];
+        // Include other pagination properties if they exist
+        current_page?: number;
+        total?: number;
+        // ... other pagination fields
+      };
+    }>(`/get-courses-in-category/${categoryId}`);
+
+    return response.courses.data ?? null;
   } catch (error) {
     console.error("Error fetching courses by category:", error);
     return null;
@@ -63,8 +70,10 @@ export const fetchCoursesByCategory = async (
 
 export const fetchAllCourses = async (): Promise<ICourse[] | null> => {
   try {
-    const response = await get<{ courses: ICourse[] }>("/get-all-courses");
-    return response.courses ?? null;
+    const response = await get<{ status: boolean; "all courses": ICourse[] }>(
+      "/get-all-courses"
+    );
+    return response["all courses"] ?? null;
   } catch (error) {
     console.error("Error fetching all courses:", error);
     return null;
@@ -78,6 +87,20 @@ export const fetchInstructorCourses = async (): Promise<ICourse[] | null> => {
     return response.courses ?? null;
   } catch (error) {
     console.error("Error fetching instructor courses:", error);
+    return null;
+  }
+};
+
+export const fetchCourseDetails = async (
+  courseId: number
+): Promise<ICourseDetailsResponse | null> => {
+  try {
+    const response = await get<ICourseDetailsResponse>(
+      `/course-details?course_id=${courseId}`
+    );
+    return response;
+  } catch (error) {
+    console.error("Error fetching course details:", error);
     return null;
   }
 };

@@ -27,6 +27,7 @@ const MyCourses = () => {
                 }
                 const fetchedCourses = await fetchAllCourses();
                 if (fetchedCourses) setCourses(fetchedCourses);
+
             } catch (error) {
                 console.error("Error loading data:", error);
             }
@@ -35,6 +36,8 @@ const MyCourses = () => {
 
         loadData();
     }, []);
+
+  
 
     const handleCategoryChange = async (category: string, categoryId: number) => {
         setCategoryFilter(category);
@@ -114,7 +117,7 @@ const MyCourses = () => {
                             {filteredCourses.map((course) => (
                                 <PurchasedCard
                                     image={course.thumbnail}
-                                    authors={[]}
+                                    authors={[]} 
                                     rating={0}
                                     progress={0}
                                     {...course}

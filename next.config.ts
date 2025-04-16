@@ -5,7 +5,14 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
-        port: "8000", // ✅ Allow images from localhost:8000
+        port: "8000",
+      },
+      // Add this configuration for DigitalOcean Spaces
+      {
+        protocol: "https",
+        hostname: "ati-image-bicket.nyc3.digitaloceanspaces.com",
+        port: "",
+        pathname: "/**", // Allow all paths
       },
     ],
   },

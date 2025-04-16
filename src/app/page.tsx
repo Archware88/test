@@ -26,7 +26,7 @@ const settings = {
   speed: 500,
   slidesToShow: 4,
   slidesToScroll: 1,
-  autoplay: true,
+  autoplay: false,
   autoplaySpeed: 2000,
   arrows: true,
 };
@@ -112,26 +112,27 @@ const Homepages = () => {
   useEffect(() => {
     const loadCourses = async () => {
       setLoadingCourses(true);
-      if (selectedCategory === "All") {
-        // Use fetchAllCourses if "All" is selected.
-        const allCourses = await fetchAllCourses();
-        setCourses(allCourses || []);
-      } else {
-        // Find the selected category object (by name) to get its id
-        const category = categories.find(
-          (cat) => cat.name === selectedCategory
-        );
-        if (category) {
-          const catCourses = await fetchCoursesByCategory(category.id);
-          setCourses(catCourses || []);
+      try {
+        let courseData;
+        if (selectedCategory === "All") {
+          courseData = await fetchAllCourses();
         } else {
-          setCourses([]);
+          const category = categories.find((cat) => cat.name === selectedCategory);
+          courseData = category ? await fetchCoursesByCategory(category.id) : null;
         }
+
+        const coursesToDisplay = courseData? courseData : courseData || [];
+        setCourses(coursesToDisplay);
+      } catch (error) {
+        console.error("Failed to load courses:", error);
+        setCourses([]);
+      } finally {
+        setLoadingCourses(false);
       }
-      setLoadingCourses(false);
     };
     loadCourses();
   }, [selectedCategory, categories]);
+
 
   return (
     <>
@@ -237,7 +238,7 @@ const Homepages = () => {
                 {/* "All" Button */}
                 <button
                   onClick={() => setSelectedCategory("All")}
-                  className={`h-[38px] px-4 py-2 rounded-md text-sm border border-black/20    whitespace-nowrap ${selectedCategory === "All" ? `bg-[#88D613] text-black` : "hover:bg-[#c9f453] text-black/40"
+                  className={`h-[38px] px-4 py-2 rounded-md text-sm  border-black/20    whitespace-nowrap ${selectedCategory === "All" ? `bg-[#88D613] text-black` : "hover:bg-[#c9f453] border text-black/40"
                     }`}
                 >
                   All
@@ -264,19 +265,19 @@ const Homepages = () => {
                 <p>Loading courses...</p>
               ) : courses.length > 0 ? (
                 <Slider {...settings}>
-                  {courses.map((course) => (
-                    <div key={course.id} className="p-4">
+                    {courses.map((course) => (
                       <UnpurchasedCard
+                        key={course.id}
+                        id={course.id}
                         image={course.image ?? ''}
                         title={course.title}
-                        authors={course.authors ?? []}
+                        authors={[course.instructors ?? "no one"]}
                         rating={course.rating ?? 0}
                         reviews={course.reviews ?? 0}
-                        price={course.price}
+                        price={course.courseprices?.[0]?.course_price ?? 0}
                         status={course.status ?? "New"}
                       />
-                    </div>
-                  ))}
+                    ))}
                 </Slider>
               ) : (
                 <p>No courses available in this category.</p>
@@ -311,8 +312,8 @@ const Homepages = () => {
                 src="/assets/images/course2.jpeg"
                 alt="Tutor"
                 className="w-full lg:pl-20 lg:h-[420px] h-[300px] rounded-lg"
-                width={100}
-                height={100}
+                width={1000}
+                height={1000}
               />
             </div>
           </section>

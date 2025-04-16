@@ -30,6 +30,22 @@ export interface IInstructorCreateData {
   };
 }
 
+export interface IPaginatedCourses {
+  current_page: number;
+  data: ICourse[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: Array<{ url: string | null; label: string; active: boolean }>;
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+}
+
 
 
 export interface IUserResponse {
@@ -83,13 +99,16 @@ export interface ICourse {
   description: string;
   price: number;
   thumbnail: string;
-  instructor?: string;
+  instructors?: string;
+  total_cost?: number;
   rating?: number;
   image?: string;
   authors?: string[];
   reviews?: number;
   status?: "New" | "Best Seller" | "Top Rated" | "Top Teacher";
   student_count?: number;
+  data: string;
+  courseprices?: { course_price: number }[];
 }
 
 export interface ICategory {
@@ -113,3 +132,38 @@ export interface IUserUpdateData {
   education?: string;
   profile_picture?: string;
 }
+
+// In types.ts
+
+export interface ICourseInfo {
+  id: number;
+  title: string;
+  subtitle: string;
+  video: string;
+  image: string;
+  status: string;
+  instructor_id: number;
+}
+
+export interface ILesson {
+  title: string;
+  video: string;
+  note: string;
+  resource: string;
+  lesson_id: number;
+  section_id: number;
+}
+
+export interface ISection {
+  section_id: number;
+  name: string;
+  lesson: ILesson[];
+}
+
+export interface ICourseDetailsResponse {
+  curriculum_id: number | null;
+  profile_info: IProfileInfo;
+  course_info: ICourseInfo;
+  curriculum_details: ISection[];
+}
+

@@ -1,7 +1,9 @@
 import { FiBookmark } from "react-icons/fi";
 import Image from "next/image";
+import Link from "next/link";
 
 interface UnpurchasedCardProps {
+  id: number;
   image: string;
   title: string;
   authors: string[];
@@ -12,6 +14,7 @@ interface UnpurchasedCardProps {
 }
 
 const UnpurchasedCard = ({
+  id,
   image,
   title,
   authors,
@@ -29,50 +32,44 @@ const UnpurchasedCard = ({
   };
 
   return (
-    <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-      {/* Course Image */}
-      <div className="relative">
-        <Image src={image} alt={title} className="w-full h-48 object-cover" width={100} height={100} />
-
-        {/* Status Badge */}
-        {status && (
-          <span
-            className={`absolute bottom-2 left-2 text-xs font-semibold px-3 py-1 rounded-full ${statusStyles[status]}`}
-          >
-            {status}
-          </span>
-        )}
-      </div>
-
-      {/* Course Details */}
-      <div className="p-4">
-        {/* Course Title */}
-        <h3 className="text-base font-semibold">{title}</h3>
-
-        {/* Authors */}
-        <p className="text-xs text-gray-500">By: {authors.join(", ")}</p>
-
-        {/* Rating */}
-        <div className="flex items-center mt-2">
-          <span className="text-yellow-500 text-lg">⭐</span>
-          <span className="ml-1 font-semibold">{rating}/5</span>
-          <span className="text-gray-500 text-sm ml-2">
-            ({reviews.toLocaleString()})
-          </span>
+    <Link href={`/CourseDetails?course_id=${id}`}>
+      <div className="bg-white shadow-sm rounded-lg overflow-hidden w-[95%] cursor-pointer hover:shadow-md transition-shadow duration-300">
+        {/* Course Image */}
+        <div className="relative">
+          <Image src={image} alt={title} className="w-full h-[200px] object-cover" width={1000} height={1000} />
+          {status && (
+            <span className={`absolute bottom-2 left-2 text-xs font-semibold px-3 py-1 rounded-full ${statusStyles[status]}`}>
+              {status}
+            </span>
+          )}
         </div>
 
-        {/* Price & Bookmark */}
-        <div className="flex justify-between items-center mt-3">
-          <span className="text-lg font-bold text-[#1B09A2]">
-            ₦ {price.toLocaleString()}
-          </span>
-          <button className="text-gray-600 text-2xl">
-            <FiBookmark />
-          </button>
+        {/* Course Details */}
+        <div className="p-4">
+          <h3 className="text-base font-medium h-[52px]">{title}</h3>
+          <p className="text-xs text-[#010101] h-3">By: {authors.join(", ")}</p>
+
+          <div className="flex items-center mt-2 -ml-1">
+            <span className="text-yellow-500 text-lg">⭐</span>
+            <span className="ml-1 font-semibold">{rating}/5</span>
+            <span className="text-gray-500 text-sm ml-2">
+              ({reviews.toLocaleString()})
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center mt-3">
+            <span className="text-lg font-medium text-[#1B09A2]">
+              ₦ {price.toLocaleString()}
+            </span>
+            <button className="text-gray-600 text-2xl">
+              <FiBookmark />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
+
 };
 
 export default UnpurchasedCard;

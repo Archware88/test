@@ -5,7 +5,7 @@ import { FiMenu, FiSearch, FiShoppingCart, FiX } from "react-icons/fi";
 import AuthContainer from "../AuthComponents/AuthContainer";
 import Image from "next/image";
 
-const Navbar = () => {
+const GuestNavbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -207,4 +207,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default GuestNavbar;

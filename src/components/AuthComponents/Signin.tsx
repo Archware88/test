@@ -12,6 +12,7 @@ const LoginModal = ({ onClose, onSwitchToSignup }: { onClose: () => void; onSwit
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+
   useEffect(() => {
     const successMessage = searchParams.get("success");
     const errorMessage = searchParams.get("error");

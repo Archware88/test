@@ -6,6 +6,7 @@ import { fetchCategories } from "@/api/courses";
 import { ICategory } from "@/types/types";
 import { FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: number, nextStep: () => void, prevStep: () => void }) => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -19,6 +20,8 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
     const [category, setCategory] = useState("");
     const [categories, setCategories] = useState<ICategory[]>([]);
     const [loadingCategories, setLoadingCategories] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
 
     const imageInputRef = useRef<HTMLInputElement>(null);
     const videoInputRef = useRef<HTMLInputElement>(null);
@@ -35,7 +38,6 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         getCategories();
     }, []);
 
-    // Handle Image Upload
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -44,7 +46,6 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         }
     };
 
-    // Handle Video Upload
     const handleVideoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -52,7 +53,6 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         }
     };
 
-    // Remove selected image
     const removeImage = () => {
         setSelectedImage(null);
         if (imageInputRef.current) {
@@ -60,7 +60,6 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         }
     };
 
-    // Remove selected video
     const removeVideo = () => {
         setSelectedVideo(null);
         if (videoInputRef.current) {
@@ -70,13 +69,14 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setIsSubmitting(true);
 
         if (!category) {
             alert("Please select a category.");
+            setIsSubmitting(false);
             return;
         }
 
-        // Create FormData object
         const formData = new FormData();
         formData.append("category_id", category);
         formData.append("title", title);
@@ -84,22 +84,21 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         formData.append("taught_in_course", description);
         formData.append("course_level", level);
 
-        // Add the video file if selected
         if (videoInputRef.current?.files?.[0]) {
             formData.append("course_video_link", videoInputRef.current.files[0]);
         }
 
-        // Add the image file if selected
         if (imageInputRef.current?.files?.[0]) {
             formData.append("course_image", imageInputRef.current.files[0]);
         }
 
-        console.log("Submitting Form Data:", Object.fromEntries(formData.entries())); // For debugging
-
         try {
             const response = await createCourseLanding(formData);
-            if (response?.status) {
-                alert("Course created successfully!");
+            if (response?.status && response.course_id) {
+                // Update URL with course ID using router.push
+                router.push(`?courseId=${response.course_id}`, { scroll: false });
+
+                // Proceed to next step
                 nextStep();
             } else {
                 alert(response?.message || "Error creating course.");
@@ -107,8 +106,11 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         } catch (error) {
             console.error("API Error:", error);
             alert("Failed to create course. Please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
+
 
     return (
         <form onSubmit={handleSubmit} className=" bg-white rounded-lg shadow">
@@ -324,9 +326,10 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
 
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-[#1B09A2] text-white rounded-lg"
+                        className="px-4 py-2 bg-[#1B09A2] text-white rounded-lg disabled:opacity-50"
+                        disabled={isSubmitting}
                     >
-                        Next
+                        {isSubmitting ? "Creating..." : "Next"}
                     </button>
                 </div>
             </div>

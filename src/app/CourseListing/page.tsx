@@ -18,13 +18,9 @@ import SkeletonLoader from "@/components/GeneralComponents/SkeletonLoader";
 import Link from "next/link";
 
 const CourseListing = () => {
-  const [purchasedCourses, setPurchasedCourses] = useState<ICourse[] | null>(
-    null
-  );
-  const [popularCourses, setPopularCourses] = useState<ICourse[] | null>(null);
-  const [trendingCourses, setTrendingCourses] = useState<ICourse[] | null>(
-    null
-  );
+  const [purchasedCourses, setPurchasedCourses] = useState<ICourse[]>([]);
+  const [popularCourses, setPopularCourses] = useState<ICourse[]>([]);
+  const [trendingCourses, setTrendingCourses] = useState<ICourse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingPopular, setLoadingPopular] = useState<boolean>(true);
   const [loadingTrending, setLoadingTrending] = useState<boolean>(true);
@@ -33,21 +29,27 @@ const CourseListing = () => {
     const loadCourses = async () => {
       setLoading(true);
       const courses = await fetchStudentCourses();
-      setPurchasedCourses(courses);
+      if (courses !== null) {
+        setPurchasedCourses(courses);
+      }
       setLoading(false);
     };
 
     const loadPopularCourses = async () => {
       setLoadingPopular(true);
       const courses = await fetchPopularCourses();
-      setPopularCourses(courses);
+      if (courses !== null) {
+        setPopularCourses(courses);
+      }
       setLoadingPopular(false);
     };
 
     const loadTrendingCourses = async () => {
       setLoadingTrending(true);
       const courses = await fetchTrendingCourses();
-      setTrendingCourses(courses);
+      if (courses !== null) {
+        setTrendingCourses(courses);
+      }
       setLoadingTrending(false);
     };
 
@@ -95,7 +97,7 @@ const CourseListing = () => {
                   <div key={index} className="p-2">
                     <PurchasedCard
                       image={course.thumbnail}
-                      authors={[]}
+                      authors={Array.isArray(course.authors) ? course.authors : [course.authors ?? ""]}
                       rating={0}
                       progress={0}
                       {...course}
@@ -120,9 +122,9 @@ const CourseListing = () => {
                   shaping their future.
                 </p>
                 <Link href="/AllCourses">
-                  <a className="mt-4 text-white py-2 px-6 rounded-lg font-semibold bg-[#1B09A2]">
+                  <div className="mt-4 text-white py-2 px-6 rounded-lg font-semibold bg-[#1B09A2]">
                     Browse Courses
-                  </a>
+                  </div>
                 </Link>
               </div>
             </div>
@@ -177,7 +179,7 @@ const CourseListing = () => {
                 <div key={index} className="p-2">
                   <UnpurchasedCard
                     image={course.thumbnail}
-                    authors={[]}
+                    authors={[course.instructors ?? "no one"]}
                     rating={0}
                     reviews={0}
                     status="New"

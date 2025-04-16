@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FiTrash, FiEdit, FiPlus, FiX } from "react-icons/fi";
 import { AnimatePresence } from "framer-motion";
 import { createCourseCurriculum } from "@/api/course-setup";
+import { useEffect } from "react";
 
 interface Lesson {
     id: string;
@@ -29,8 +30,20 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
         },
     ]);
     const [isSaving, setIsSaving] = useState(false);
+    const [courseId, setCourseId] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            setCourseId(params.get('courseId'));
+        }
+    }, []);
 
     const submitCurriculum = async (moduleToSave?: CourseModule) => {
+        if (!courseId) {
+            alert("Course ID is missing");
+            return;
+        }
         setIsSaving(true);
 
         try {
@@ -38,7 +51,7 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
 
             for (const courseModule of modulesToSave) {
                 const formData = new FormData();
-                formData.append("course_id", "1");
+                formData.append("course_id", courseId);
                 formData.append("course_section", courseModule.title);
 
                 courseModule.lessons.forEach((lesson, index) => {

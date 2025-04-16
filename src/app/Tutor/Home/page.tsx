@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import React from "react";
-import Navbar from "@/components/GeneralComponents/navbar";
+import Navbar from "@/components/GeneralComponents/NavbarState";
 import Footer from "@/components/GeneralComponents/Footer";
 // import Link from "next/link";
 import AuthContainer from "@/components/AuthComponents/AuthContainer";
@@ -36,7 +36,7 @@ const TeachPage = () => {
     return (
         <div className="w-full">
 
-            <Navbar />
+            <Navbar/>
 
             {/* Hero Section */}
             <section className="relative w-full h-[422px] bg-cover bg-[center_top_-43px] flex flex-col items-center justify-center text-white text-center px-4 pt-[86px] pb-[1px] mt-[80px]"

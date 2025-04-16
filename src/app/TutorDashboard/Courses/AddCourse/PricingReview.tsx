@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { FiCopy } from "react-icons/fi";
-import { createCoursePricing, createCourseMessages } from "@/api/course-setup"; 
+import { createCoursePricing, createCourseMessages, markCourseSetupDone } from "@/api/course-setup"; 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
 const PricingReview = () => {
@@ -11,6 +13,17 @@ const PricingReview = () => {
     const [welcomeMessage, setWelcomeMessage] = useState("");
     const [congratsMessage, setCongratsMessage] = useState("");
     const [loading, setLoading] = useState(false); // State for loading
+ 
+    const router = useRouter();
+
+    const [courseId, setCourseId] = useState<string | null>(null);
+    
+        useEffect(() => {
+            if (typeof window !== 'undefined') {
+                const params = new URLSearchParams(window.location.search);
+                setCourseId(params.get('courseId'));
+            }
+        }, []);
 
     // Function to copy referral link
     const copyToClipboard = () => {
@@ -20,11 +33,14 @@ const PricingReview = () => {
 
     // Submit function to trigger both APIs
     const handleSubmit = async () => {
-        setLoading(true); // Show loading state
+        if (!courseId) {
+            alert("Course ID is missing");
+            return;
+        }
+
+        setLoading(true);
 
         try {
-            const courseId = "1"; // Replace with the actual course ID from context or props
-
             // Prepare FormData for Course Pricing
             const pricingFormData = new FormData();
             pricingFormData.append("course_id", courseId);
@@ -36,24 +52,37 @@ const PricingReview = () => {
             messagesFormData.append("welcome_message", welcomeMessage);
             messagesFormData.append("congratulation_message", congratsMessage);
 
-            // Send both API requests concurrently
+            // Send pricing and message requests in parallel
             const [pricingResponse, messagesResponse] = await Promise.all([
                 createCoursePricing(pricingFormData),
                 createCourseMessages(messagesFormData),
             ]);
 
             if (pricingResponse?.status && messagesResponse?.status) {
-                alert("Course pricing and messages updated successfully!");
+                // ✅ Now mark the course setup as completed
+                const setupResponse = await markCourseSetupDone({
+                    course_id: Number(courseId),
+                    completed_status: true,
+                });
+
+                if (setupResponse?.status) {
+                    alert("Course setup completed successfully!");
+                    router.push("/TutorDashboard/Courses"); 
+                } else {
+                    alert("Course setup marking failed. Please try again.");
+                    console.error("Setup error:", setupResponse?.errors);
+                }
             } else {
-                alert("Failed to update some data. Check your inputs and try again.");
+                alert("Failed to update some course data. Check your inputs and try again.");
             }
         } catch (error) {
             console.error("Error submitting data:", error);
             alert("An error occurred while updating course data.");
         } finally {
-            setLoading(false); // Hide loading state
+            setLoading(false);
         }
     };
+
 
     return (
         <div className="p-6 mx-auto">

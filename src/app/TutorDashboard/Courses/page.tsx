@@ -95,6 +95,7 @@ const InstructorPage = () => {
                     {filteredCourses.length > 0 ? (
                         filteredCourses.map((course, index) => (
                             <CourseCard
+                                image={course.image}
                                 key={index}
                                 title={course.title}
                                 status={course.status as "Draft" | "Live" | "In Review"}
