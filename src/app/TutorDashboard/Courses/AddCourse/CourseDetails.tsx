@@ -6,7 +6,7 @@ import { fetchCategories } from "@/api/courses";
 import { ICategory } from "@/types/types";
 import { FiChevronDown } from "react-icons/fi";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: number, nextStep: () => void, prevStep: () => void }) => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -22,6 +22,8 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
     const [loadingCategories, setLoadingCategories] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     const imageInputRef = useRef<HTMLInputElement>(null);
     const videoInputRef = useRef<HTMLInputElement>(null);
@@ -38,6 +40,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         getCategories();
     }, []);
 
+    // Handle Image Upload
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -46,6 +49,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         }
     };
 
+    // Handle Video Upload
     const handleVideoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -53,6 +57,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         }
     };
 
+    // Remove selected image
     const removeImage = () => {
         setSelectedImage(null);
         if (imageInputRef.current) {
@@ -60,6 +65,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         }
     };
 
+    // Remove selected video
     const removeVideo = () => {
         setSelectedVideo(null);
         if (videoInputRef.current) {
@@ -95,8 +101,10 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
         try {
             const response = await createCourseLanding(formData);
             if (response?.status && response.course_id) {
-                // Update URL with course ID using router.push
-                router.push(`?courseId=${response.course_id}`, { scroll: false });
+                // Update URL with course ID without reloading
+                const params = new URLSearchParams(searchParams);
+                params.set('courseId', `${response?.course_id}`);
+                router.replace(`${pathname}?${params.toString()}`);
 
                 // Proceed to next step
                 nextStep();

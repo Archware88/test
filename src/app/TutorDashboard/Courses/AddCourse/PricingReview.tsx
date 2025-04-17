@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import { FiCopy } from "react-icons/fi";
-import { createCoursePricing, createCourseMessages, markCourseSetupDone } from "@/api/course-setup"; 
+import { createCoursePricing, createCourseMessages, markCourseSetupDone } from "@/api/course-setup";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 
 const PricingReview = () => {
@@ -13,17 +13,9 @@ const PricingReview = () => {
     const [welcomeMessage, setWelcomeMessage] = useState("");
     const [congratsMessage, setCongratsMessage] = useState("");
     const [loading, setLoading] = useState(false); // State for loading
- 
+    const searchParams = useSearchParams();
+    const courseId = searchParams.get('courseId');
     const router = useRouter();
-
-    const [courseId, setCourseId] = useState<string | null>(null);
-    
-        useEffect(() => {
-            if (typeof window !== 'undefined') {
-                const params = new URLSearchParams(window.location.search);
-                setCourseId(params.get('courseId'));
-            }
-        }, []);
 
     // Function to copy referral link
     const copyToClipboard = () => {
@@ -67,7 +59,7 @@ const PricingReview = () => {
 
                 if (setupResponse?.status) {
                     alert("Course setup completed successfully!");
-                    router.push("/TutorDashboard/Courses"); 
+                    router.push("/TutorDashboard/Courses");
                 } else {
                     alert("Course setup marking failed. Please try again.");
                     console.error("Setup error:", setupResponse?.errors);

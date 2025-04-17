@@ -200,9 +200,9 @@ const Homepages = () => {
                 {[...logos, ...logos].map((src, index) => (
                   <div key={index} className="flex-shrink-0">
                     <Image
-                      src={src}
+                      src={src || "/assets/images/Logo.png"}
                       alt={`Logo ${index + 1}`}
-                      width={150}
+                      width={15}
                       height={50}
                       className="w-[150px] max-h-[50px] object-contain"
                     />

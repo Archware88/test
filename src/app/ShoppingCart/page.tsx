@@ -26,7 +26,7 @@ const initialCart: Course[] = [
         rating: 4.7,
         reviews: 267,
         price: 30000,
-        image: "/marketing.jpg",
+        image: "/assets/images/course3.jpeg",
     },
     {
         id: 2,
@@ -37,7 +37,7 @@ const initialCart: Course[] = [
         rating: 4.7,
         reviews: 267,
         price: 30000,
-        image: "/webdev.jpg",
+        image: "/assets/images/course3.jpeg",
     },
 ];
 
@@ -92,22 +92,29 @@ const ShoppingCart = () => {
     return (
         <>
         <UserNavbar/>
-        <div className="mx-auto pt-20 px-5">
-            <h1 className="text-2xl font-bold">Shopping Cart ({cart.length})</h1>
+        <div className="mx-auto pt-44 px-[120px]">
+            <h1 className="text-2xl font-medium">SHOPPING CART ({cart.length})</h1>
 
             <div className="flex">
                 {/* Cart Items */}
                 <div className="mt-5 space-y-4 w-7/12">
                     {cart.map((course) => (
-                        <div key={course.id} className="flex items-center p-4 bg-white shadow-md rounded-lg">
+                        <div key={course.id} className="flex items-center p-4 bg-white border-2 border-[#01010111] rounded-lg">
                             <Image src={course.image} alt={course.title} className="w-24 h-24 object-cover rounded-md " height={100} width={100} />
                             <div className="ml-4 flex-grow">
-                                <h2 className="font-semibold">{course.title}</h2>
-                                <p className="text-sm text-gray-500">By {course.author} • {course.level}</p>
-                                <p className="text-sm text-gray-500">Updated {course.updated} • ⭐ {course.rating} ({course.reviews} Reviews)</p>
-                                <p className="text-lg font-bold text-blue-600">N {course.price.toLocaleString()}</p>
+                                <h2 className="font-medium">{course.title}</h2>
+                                <div className="flex items-center h-6 pt-2">
+                                    <p className="text-xs text-[#010101] mr-2">By {course.author}</p>
+                                    <div className="w-[1px] h-3 bg-[#010101] mr-2 flex align-middle"></div>
+                                    <p className="text-xs text-[#010101]"> • {course.level}</p>
+                                </div>
+                                <div className="flex items-center h-6 pt-2">
+                                    <p className="text-xs text-[#010101]">Updated {course.updated} </p>
+                                    <p className="text-xs text-[#010101] ml-2"> • ⭐ {course.rating} ({course.reviews} Reviews)</p>
+                                </div>
+                                <p className="text-lg font-bold text-[#1B09A2] pt-2">N {course.price.toLocaleString()}</p>
                             </div>
-                            <button onClick={() => removeFromCart(course.id)} className="text-red-600 hover:underline">
+                            <button onClick={() => removeFromCart(course.id)} className="text-[#1B09A2] hover:underline flex items-start">
                                 🗑 Remove from cart
                             </button>
                         </div>

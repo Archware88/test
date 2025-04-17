@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FiTrash, FiEdit, FiPlus, FiX } from "react-icons/fi";
 import { AnimatePresence } from "framer-motion";
 import { createCourseCurriculum } from "@/api/course-setup";
-import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 interface Lesson {
     id: string;
@@ -30,14 +30,8 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
         },
     ]);
     const [isSaving, setIsSaving] = useState(false);
-    const [courseId, setCourseId] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const params = new URLSearchParams(window.location.search);
-            setCourseId(params.get('courseId'));
-        }
-    }, []);
+    const searchParams = useSearchParams();
+    const courseId = searchParams.get('courseId');
 
     const submitCurriculum = async (moduleToSave?: CourseModule) => {
         if (!courseId) {
@@ -408,7 +402,7 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
                 disabled={isSaving}
                 className="mt-4 ml-4 px-4 py-2 bg-green-600 text-white rounded flex items-center disabled:opacity-50"
             >
-               Next
+                Next
             </button>
         </div>
     );

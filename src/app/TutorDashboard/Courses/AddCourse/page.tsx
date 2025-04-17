@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import {Suspense, useState } from "react";
 import InstructorLayout from "../../Components/InstructorLayout";
 import  CourseDetails  from "./CourseDetails";
 import CourseStructure from "./CourseStructure";
@@ -77,16 +77,24 @@ const AddCoursePage = () => {
         {/* Step Components */}
         <div className="mt-6 p-4">
           {currentStep === 0 && (
+            <Suspense fallback={<div>Loading structure...</div>}>
             <CourseDetails currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />
+            </Suspense>
           )}
           {currentStep === 1 && (
+            <Suspense fallback={<div>Loading structure...</div>}>
             <CourseStructure currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />
+            </Suspense>
           )}
           {currentStep === 2 && (
+            <Suspense fallback={<div>Loading structure...</div>}>
             <CourseContent currentStep={currentStep} nextStep={nextStep} prevStep={prevStep} />
+            </Suspense>
           )}
           {currentStep === 3 && (
+            <Suspense fallback={<div>Loading structure...</div>}>
             <PricingReview  />
+            </Suspense>
           )}
         </div>
       </div>

@@ -11,7 +11,7 @@ const CourseStructure = ({
     nextStep: () => void;
     prevStep: () => void;
 }) => {
-   
+
     const [learningObjectives, setLearningObjectives] = useState(["", "", "", ""]);
     const [prerequisites, setPrerequisites] = useState([""]);
     const [welcomeMessage, setWelcomeMessage] = useState("");
@@ -84,7 +84,7 @@ const CourseStructure = ({
             setLoading(false);
         }
     };
-    
+
 
     return (
         <div className="p-6 bg-white rounded-lg shadow">
