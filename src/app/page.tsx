@@ -202,7 +202,7 @@ const Homepages = () => {
                     <Image
                       src={src || "/assets/images/Logo.png"}
                       alt={`Logo ${index + 1}`}
-                      width={15}
+                      width={150}
                       height={50}
                       className="w-[150px] max-h-[50px] object-contain"
                     />
