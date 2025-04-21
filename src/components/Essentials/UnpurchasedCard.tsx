@@ -4,7 +4,7 @@ import Link from "next/link";
 
 interface UnpurchasedCardProps {
   id: number;
-  image: string;
+  image: string | null;
   title: string;
   authors: string[];
   rating: number;
@@ -36,7 +36,7 @@ const UnpurchasedCard = ({
       <div className="bg-white shadow-sm rounded-lg overflow-hidden w-[95%] cursor-pointer hover:shadow-md transition-shadow duration-300">
         {/* Course Image */}
         <div className="relative">
-          <Image src={image} alt={title} className="w-full h-[200px] object-cover" width={1000} height={1000} />
+          <Image src={image || '/assets/images/course-placeholder.jpg'} alt={title} className="w-full h-[200px] object-cover" width={1000} height={1000} />
           {status && (
             <span className={`absolute bottom-2 left-2 text-xs font-semibold px-3 py-1 rounded-full ${statusStyles[status]}`}>
               {status}

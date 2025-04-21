@@ -96,7 +96,7 @@ const CourseListing = () => {
                 {purchasedCourses.map((course, index) => (
                   <div key={index} className="p-2">
                     <PurchasedCard
-                      image={course.thumbnail}
+                      image={course.thumbnail || null}
                       authors={Array.isArray(course.authors) ? course.authors : [course.authors ?? ""]}
                       rating={0}
                       progress={0}
@@ -122,7 +122,7 @@ const CourseListing = () => {
                   shaping their future.
                 </p>
                 <Link href="/AllCourses">
-                  <div className="mt-4 text-white py-2 px-6 rounded-lg font-semibold bg-[#1B09A2]">
+                  <div className="mt-4 w-fit text-white py-2 px-6 rounded-lg font-semibold bg-[#1B09A2]">
                     Browse Courses
                   </div>
                 </Link>
@@ -147,7 +147,7 @@ const CourseListing = () => {
               {trendingCourses.map((course, index) => (
                 <div key={index} className="p-2">
                   <UnpurchasedCard
-                    image={course.thumbnail}
+                    image={course.thumbnail || null}
                     authors={[]}
                     rating={0}
                     reviews={0}

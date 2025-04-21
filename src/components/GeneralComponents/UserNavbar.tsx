@@ -5,6 +5,7 @@ import Image from "next/image";
 import { fetchProfileInfo } from "@/api/student";
 import { IProfileInfo } from "@/types/types";
 import { BASE_URL } from "@/api/constants";
+import Link from "next/link";
 
 const UserNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,15 +35,17 @@ const UserNavbar = () => {
       <div className="hidden md:block fixed w-full z-50 text-sm">
         <nav className="border-gray-300 py-3 px-12 flex items-center justify-between bg-[#FFFCF5]">
           {/* Left: Logo */}
-          <div className="flex items-center">
-            <Image
-              src="/assets/images/ArchwareLogo.svg"
-              alt="ArchWare Logo"
-              className="h-16"
-              width={100}
-              height={100}
-            />
-          </div>
+          <Link href="/">
+            <div className="flex items-center">
+              <Image
+                src="/assets/images/ArchwareLogo.svg"
+                alt="ArchWare Logo"
+                className="h-16"
+                width={100}
+                height={100}
+              />
+            </div>
+          </Link>
 
           {/* Center: Search Bar */}
           <div className="flex-grow max-w-xl mx-6 relative">
@@ -155,12 +158,16 @@ const UserNavbar = () => {
       {/* Mobile Navbar */}
       <div className="md:hidden bg-white shadow-md p-4 flex justify-between items-center">
         {/* Left: Logo */}
-        <Image
-          src="/assets/images/ArchwareLogo.svg"
-          alt="ArchWare Logo"
-          width={80}
-          height={80}
-        />
+        <Link href="/">
+          <>
+            <Image
+              src="/assets/images/ArchwareLogo.svg"
+              alt="ArchWare Logo"
+              width={80}
+              height={80}
+            />
+          </>
+        </Link>
 
         {/* Hamburger Icon */}
         <button onClick={() => setMenuOpen(!menuOpen)} className="text-gray-600 text-2xl">

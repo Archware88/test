@@ -1,32 +1,27 @@
-"use client";
-import { useState, useEffect } from "react";
+"use client"; // Must be at the very top
+
+import { useState } from "react";
+import { useSearchParams } from "next/navigation"; // Updated import for App Router
 import { FiPlus, FiX } from "react-icons/fi";
-import { createCourseDescription } from "@/api/course-setup"; // Import API helper
+import { createCourseDescription } from "@/api/course-setup";
 
 const CourseStructure = ({
     nextStep,
-    // prevStep,
 }: {
     currentStep: number;
     nextStep: () => void;
     prevStep: () => void;
 }) => {
+    const searchParams = useSearchParams();
+    const courseId = searchParams.get("courseId"); // Get courseId directly
 
     const [learningObjectives, setLearningObjectives] = useState(["", "", "", ""]);
     const [prerequisites, setPrerequisites] = useState([""]);
     const [welcomeMessage, setWelcomeMessage] = useState("");
     const [congratulationsMessage, setCongratulationsMessage] = useState("");
     const [loading, setLoading] = useState(false);
-    const [courseId, setCourseId] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const params = new URLSearchParams(window.location.search);
-            setCourseId(params.get('courseId'));
-        }
-    }, []);
-
-    // Handle Input Changes
+    // Rest of your component remains the same...
     const handleLearningObjectiveChange = (index: number, value: string) => {
         const newObjectives = [...learningObjectives];
         newObjectives[index] = value;
@@ -34,6 +29,7 @@ const CourseStructure = ({
     };
 
     const addLearningObjective = () => setLearningObjectives([...learningObjectives, ""]);
+
     const removeLearningObjective = (index: number) => {
         if (learningObjectives.length > 4) {
             setLearningObjectives(learningObjectives.filter((_, i) => i !== index));
@@ -47,11 +43,11 @@ const CourseStructure = ({
     };
 
     const addPrerequisite = () => setPrerequisites([...prerequisites, ""]);
+
     const removePrerequisite = (index: number) => {
         setPrerequisites(prerequisites.filter((_, i) => i !== index));
     };
 
-    // Submit Data as JSON
     const handleSubmit = async () => {
         if (!courseId) {
             alert("Course ID is missing");
@@ -61,30 +57,37 @@ const CourseStructure = ({
         setLoading(true);
 
         const formData = new FormData();
-        formData.append("course_id", courseId); // Use the courseId from URL
+        formData.append("course_id", courseId);
 
-        // Append each learning objective
         learningObjectives
             .filter(obj => obj.trim() !== "")
             .forEach((obj, index) => {
                 formData.append(`course_objective[${index}]`, obj);
             });
 
-        // ... (rest of your formData appends remain the same) ...
+        prerequisites
+            .filter(req => req.trim() !== "")
+            .forEach((req, index) => {
+                formData.append(`course_requirement[${index}]`, req);
+            });
+
+        if (welcomeMessage.trim()) {
+            formData.append("welcome_message", welcomeMessage.trim());
+        }
+
+        if (congratulationsMessage.trim()) {
+            formData.append("congratulations_message", congratulationsMessage.trim());
+        }
 
         try {
             const response = await createCourseDescription(formData);
             if (response?.status) {
-                console.log("Course description added successfully:", response);
                 nextStep();
-            } else {
-                console.error("Failed to add course description:", response);
             }
         } finally {
             setLoading(false);
         }
     };
-
 
     return (
         <div className="p-6 bg-white rounded-lg shadow">

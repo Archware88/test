@@ -35,7 +35,7 @@ const GuestNavbar = () => {
 
           {/* Logo (Moves to top right when menu opens) */}
           {!menuOpen ? (
-            <div className="logo flex items-center mx-auto">
+            <Link href="/" className="logo flex items-center mx-auto">
               <Image
                 src="/assets/images/ArchwareLogo.svg"
                 className="h-8"
@@ -43,17 +43,19 @@ const GuestNavbar = () => {
                 width={100}
                 height={100}
               />
-            </div>
+            </Link>
           ) : (
-            <div className="absolute top-6 right-6">
-              <Image
-                src="/assets/images/ArchwareLogo.svg"
-                className="h-8"
-                alt="Archware Logo"
-                width={100}
-                height={100}
-              />
-            </div>
+            <Link href="/">
+              <div className="absolute top-6 right-6">
+                <Image
+                  src="/assets/images/ArchwareLogo.svg"
+                  className="h-8"
+                  alt="Archware Logo"
+                  width={100}
+                  height={100}
+                />
+              </div>
+            </Link>
           )}
 
           {/* Icons: Search & Cart */}
@@ -78,7 +80,7 @@ const GuestNavbar = () => {
             {/* Close Button */}
 
             <div className="bg-gray-100 py-4 px-6 flex items-center justify-between w-full relative border-b border-gray-300">
-              <div className="flex items-center">
+              <Link href="/" className="flex items-center">
                 <Image
                   src="/assets/images/ArchwareLogo.svg"
                   className="h-8"
@@ -86,7 +88,7 @@ const GuestNavbar = () => {
                   width={100}
                   height={100}
                 />
-              </div>
+              </Link>
               <div>
                 <button
                   onClick={() => setMenuOpen(false)}
@@ -138,15 +140,17 @@ const GuestNavbar = () => {
         {/* Desktop View */}
         <div className="hidden md:flex justify-between items-center w-full">
           {/* Logo */}
-          <div className="logo flex items-center">
-            <Image
-              src="/assets/images/ArchwareLogo.svg"
-              className="h-8"
-              alt="Archware Logo"
-              width={100}
-              height={100}
-            />
-          </div>
+          <Link href="/">
+            <div className="logo flex items-center cursor-pointer">
+              <Image
+                src="/assets/images/ArchwareLogo.svg"
+                className="h-8"
+                alt="Archware Logo"
+                width={100}
+                height={100}
+              />
+            </div>
+          </Link>
 
           <div className="relative w-1/3">
             <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
