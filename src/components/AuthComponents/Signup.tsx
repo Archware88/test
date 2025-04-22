@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { FiX } from "react-icons/fi";
 import { createUser, registerInstructor } from "@/api/auth"; // Import both APIs
+import { usePathname } from "next/navigation";
+
 
 const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
   onClose: () => void;
@@ -9,6 +11,8 @@ const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
   onSignupSuccess: (email: string) => void;
 }) => {
   // Form State
+  const pathname = usePathname();
+  const isTutorPage = pathname.includes("/Tutor/Home");
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -16,11 +20,12 @@ const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
     phone: "",
     password: "",
     confirmPassword: "",
-    role: "student", // Default to student
+    role: isTutorPage ? "instructor" : "student",
   });
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
 
   // Handle Input Change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -163,21 +168,7 @@ const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
               </div>
             </div>
 
-            {/* Role Selection */}
-            <div className="mt-4 space-y-1">
-              <p>Signup As</p>
-              <select
-                name="role"
-                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-gray-400 text-xs"
-                value={formData.role}
-                onChange={handleChange}
-                required
-              >
-                <option value="student">Student</option>
-                <option value="instructor">Instructor</option>
-              </select>
-            </div>
-
+           
             {/* Terms & Conditions */}
             <div className="flex items-center space-x-2 pt-4">
               <input type="checkbox" className="w-4 h-4" required />

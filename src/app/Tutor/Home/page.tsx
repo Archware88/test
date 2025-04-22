@@ -6,6 +6,10 @@ import Navbar from "@/components/GeneralComponents/NavbarState";
 import Footer from "@/components/GeneralComponents/Footer";
 // import Link from "next/link";
 import AuthContainer from "@/components/AuthComponents/AuthContainer";
+import Image from "next/image";
+import { SiLinkedin } from "react-icons/si";
+import { BsFillPersonPlusFill, BsCameraVideoFill, BsCashStack } from "react-icons/bs";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 const faqs = [
     { question: "What is Archware Institute?", answer: "Archware Institute is an online learning platform offering courses in various disciplines to help learners grow their skills." },
@@ -39,23 +43,22 @@ const TeachPage = () => {
             <Navbar/>
 
             {/* Hero Section */}
-            <section className="relative w-full h-[422px] bg-cover bg-[center_top_-43px] flex flex-col items-center justify-center text-white text-center px-4 pt-[86px] pb-[1px] mt-[80px]"
-                style={{ backgroundImage: "url('src/assets/images/tutor-hero.png')" }}>
+            <section className="relative w-full h-[420px] bg-cover bg-[center_top_-43px] flex flex-col items-center justify-center text-white text-center px-4 pt-[86px] pb-[1px] mt-[80px]"
+                style={{ backgroundImage: "url('/assets/images/instructor-home.jpg')" }}>
 
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-black opacity-70"></div>
 
                 {/* Content */}
                 <div className="relative z-10 mt-[-200px]">
-                    <h1 className="text-4xl font-bold">Inspire Creativity in Others</h1>
-                    <p className="mt-4 max-w-2xl">
+                    <h1 className="text-[42px] font-medium">Inspire Creativity in Others</h1>
+                    <p className="mt-4 max-w-[592px]">
                         Teach on Archware Institute and share your passion with members around the world.
                     </p>
                 </div>
 
                 {/* Bottom Box */}
-                <div className="absolute bottom-0 w-[382px] h-[164px] bg-[#1B09A2] text-white text-[14px] font-normal px-4 pt-[23px] shadow-md"
-                    style={{ borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}>
+                <div className="absolute bottom-0 w-[592px] h-[164px] bg-[#1B09A2] text-white text-sm font-normal px-4 pt-[23px] rounded-t-lg ">
 
                     <p>
                         Before signing up, check out this
@@ -65,8 +68,8 @@ const TeachPage = () => {
 
                     <button
                         onClick={openSignupModal}>
-                        <div className="mt-3 text-white px-6 py-2 rounded-md hover:brightness-110"
-                            style={{ backgroundColor: '#88D613' }}>
+                        <div className="mt-5 text-[#101010] px-6 py-2 rounded-md hover:brightness-110"
+                            style={{ backgroundColor: '#88D613', border: '2px solid #88D613' }}>
                             Become a Tutor
                         </div>
                     </button>
@@ -77,26 +80,30 @@ const TeachPage = () => {
             {/* Why Teach Section */}
             <section className="w-full bg-gray-50 py-16 flex justify-center">
                 {/* Outer Container */}
-                <div className="max-w-5xl w-full bg-white rounded-md shadow-md p-8 relative">
+                <div className="max-w-5xl w-full bg-white rounded-md  py-16 relative">
                     {/* Decorative Icons (optional) */}
-                    <img
-                        src="src/assets/images/decor-left.svg"
+                    <Image
+                        src="/assets/images/star1.svg"
                         alt="Decor Left"
                         className="absolute top-0 left-0"
+                        width={40}
+                        height={40}
                     />
-                    <img
-                        src="src/assets/images/decor-right.svg"
+                    <Image
+                        src="/assets/images/star.svg"
                         alt="Decor Right"
                         className="absolute top-0 right-0"
+                        width={40}
+                        height={40}
                     />
 
                     {/* Title */}
-                    <h2 className="text-3xl font-bold text-center">
+                    <h2 className="text-3xl font-medium text-center ">
                         Why Teach on Archware Institute?
                     </h2>
 
                     {/* Subheading */}
-                    <p className="mt-4 text-lg font-semibold text-center">
+                    <p className="mt-4 text-lg font-medium text-center">
                         When you help others along their creative journey, it’s rewarding in more ways than one.
                     </p>
 
@@ -113,28 +120,35 @@ const TeachPage = () => {
             </section>
 
             {/* Testimonial Section */}
+            <div className="mt-20 bg-gray-50">
             <section className="w-full bg-[#1B09A2] pt-16 pb-12 text-white text-center relative">
                 {/* Star Shapes on Both Sides */}
                 <div className="absolute left-16 top-1/2 transform -translate-y-1/2">
-                    <img
-                        src="src/assets/images/star_left.svg"  // <-- Update path to your star icon
+                    <Image
+                        src="/assets/images/star3.svg"
                         alt="Left Star"
                         className="w-[58px] h-auto"
+                        width={58}
+                        height={58}
                     />
                 </div>
                 <div className="absolute right-16 top-1/2 transform -translate-y-1/2">
-                    <img
-                        src="src/assets/images/star_right.svg" // <-- Update path to your star icon
+                    <Image
+                        src="/assets/images/star4.svg"
                         alt="Right Star"
                         className="w-[58px] h-auto"
+                        width={58}
+                        height={58}
                     />
                 </div>
                 {/* Overlapping Image */}
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                    <img
-                        src="src/assets/images/instructor.png"
+                    <Image
+                        src="/assets/images/container.svg"
                         alt="Gbolahan Adekoya"
-                        className="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg"
+                        className="w-32 h-32 rounded-full  object-cover shadow-lg"
+                        width={128}
+                        height={128}
                     />
                 </div>
 
@@ -149,23 +163,26 @@ const TeachPage = () => {
                     </p>
 
                     {/* View LinkedIn Button */}
-                    <button className="mt-6 px-6 py-2 border border-white rounded-md hover:bg-white hover:text-[#1B09A2] transition">
+                    <center>
+                    <button className="mt-6 px-6 py-2 border-[0.5px] text-sm border-white rounded-md hover:bg-white hover:text-[#1B09A2] transition flex items-center justify-center gap-2">
+                        <SiLinkedin size={24} color="white" className="w-3 h-3"/>
                         View LinkedIn
                     </button>
+                        </center>
                 </div>
             </section>
+            </div>
 
 
             {/* How Teaching Works Section */}
             <section className="py-16 px-6 bg-gray-100 text-center">
-                <h2 className="text-3xl font-bold text-gray-900 mb-10">How Teaching Works</h2>
+                <h2 className="text-3xl font-meduium text-gray-900 mb-10">How Teaching Works</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {/* Card 1 */}
-                    <div className="border border-blue-500 p-6 rounded-lg bg-white shadow-md">
+                    <div className="border border-[#1B09A2] p-6 rounded-lg bg-white shadow-md">
                         <div className="flex justify-center mb-4">
-                            {/* Replace with your actual icon */}
-                            <img src="https://img.icons8.com/ios/100/000000/certificate.png" alt="Sign Up" className="w-16 h-16" />
+                            <BsFillPersonPlusFill size={40} color="#1B09A2" />
                         </div>
                         <h3 className="text-xl font-semibold mb-3">Sign Up to Teach</h3>
                         <p className="text-gray-600">
@@ -174,10 +191,9 @@ const TeachPage = () => {
                     </div>
 
                     {/* Card 2 */}
-                    <div className="border border-blue-500 p-6 rounded-lg bg-white shadow-md">
+                    <div className="border border-[#1B09A2] p-6 rounded-lg bg-white shadow-md">
                         <div className="flex justify-center mb-4">
-                            {/* Replace with your actual icon */}
-                            <img src="https://img.icons8.com/ios/100/000000/camera--v1.png" alt="Create Content" className="w-16 h-16" />
+                            <BsCameraVideoFill size={40} color="#1B09A2" />
                         </div>
                         <h3 className="text-xl font-semibold mb-3">Create Your Content</h3>
                         <p className="text-gray-600">
@@ -186,10 +202,9 @@ const TeachPage = () => {
                     </div>
 
                     {/* Card 3 */}
-                    <div className="border border-blue-500 p-6 rounded-lg bg-white shadow-md">
+                    <div className="border border-[#1B09A2] p-6 rounded-lg bg-white shadow-md">
                         <div className="flex justify-center mb-4">
-                            {/* Replace with your actual icon */}
-                            <img src="https://img.icons8.com/ios/100/000000/money--v1.png" alt="Start Earning" className="w-16 h-16" />
+                            <BsCashStack size={40} color="#1B09A2" />
                         </div>
                         <h3 className="text-xl font-semibold mb-3">Start Earning</h3>
                         <p className="text-gray-600">
@@ -201,7 +216,7 @@ const TeachPage = () => {
                 {/* Button */}
                 <div className="mt-10">
                     <button
-                        onClick={openSignupModal} className="bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-green-600 transition">
+                        onClick={openSignupModal} className="bg-[#88D613] text-sm text-black px-6 py-3 rounded-lg  font-medium hover:bg-[#2F9A53] transition">
                         <>
                             Become a Tutor
                         </>
@@ -212,19 +227,22 @@ const TeachPage = () => {
 
             {/* FAQ Section */}
             <section className="py-16 px-6 bg-gray-100">
-                <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-8">
+                <h2 className="text-xl md:text-2xl  text-center text-gray-900 mb-8">
                     FREQUENTLY ASKED QUESTIONS
                 </h2>
 
                 <div className="max-w-3xl mx-auto">
+                    <div className="border-b border-gray-300"></div>
                     {faqs.map((faq, index) => (
                         <div key={index} className="border-b border-gray-300">
                             <button
-                                className="w-full text-left py-4 px-2 flex justify-between items-center text-gray-800 hover:text-blue-600 transition"
+                                className="w-full text-left py-6 px-2 flex justify-between items-center text-gray-800 hover:text-blue-600 transition"
                                 onClick={() => toggleFAQ(index)}
                             >
                                 <span className="text-lg font-medium">{faq.question}</span>
-                                <span className="text-xl">{openIndex === index ? "▲" : "▼"}</span>
+                                <span className="text-xl">
+                                    {openIndex === index ? <FiChevronUp /> : <FiChevronDown />}
+                                </span>
                             </button>
                             {openIndex === index && (
                                 <p className="px-4 pb-4 text-gray-600">{faq.answer}</p>
