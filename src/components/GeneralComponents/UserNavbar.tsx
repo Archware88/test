@@ -32,7 +32,7 @@ const UserNavbar = () => {
   return (
     <div>
       {/* Desktop Navbar */}
-      <div className="hidden md:block fixed w-full z-50 text-sm">
+      <div className="hidden md:block top-0 fixed w-full z-50 text-sm">
         <nav className="border-gray-300 py-3 px-12 flex items-center justify-between bg-[#FFFCF5]">
           {/* Left: Logo */}
           <Link href="/">
