@@ -68,7 +68,7 @@ const TeachPage = () => {
 
                     <button
                         onClick={openSignupModal}>
-                        <div className="mt-5 text-[#101010] px-6 py-2 rounded-md hover:brightness-110"
+                        <div className="mt-5 text-[#101010] px-6 py-2 rounded-md hover:brightness-110 cusor-pointer"
                             style={{ backgroundColor: '#88D613', border: '2px solid #88D613' }}>
                             Become a Tutor
                         </div>
@@ -164,7 +164,7 @@ const TeachPage = () => {
 
                     {/* View LinkedIn Button */}
                     <center>
-                    <button className="mt-6 px-6 py-2 border-[0.5px] text-sm border-white rounded-md hover:bg-white hover:text-[#1B09A2] transition flex items-center justify-center gap-2">
+                            <button className="mt-6 px-6 py-2 cusor-pointer border-[0.5px] text-sm border-white rounded-md hover:bg-white hover:text-[#1B09A2] transition flex items-center justify-center gap-2">
                         <SiLinkedin size={24} color="white" className="w-3 h-3"/>
                         View LinkedIn
                     </button>
@@ -216,7 +216,7 @@ const TeachPage = () => {
                 {/* Button */}
                 <div className="mt-10">
                     <button
-                        onClick={openSignupModal} className="bg-[#88D613] text-sm text-black px-6 py-3 rounded-lg  font-medium hover:bg-[#2F9A53] transition">
+                        onClick={openSignupModal} className="bg-[#88D613] text-sm text-black cusor-pointer px-6 py-3 rounded-lg  font-medium hover:bg-[#2F9A53] transition">
                         <>
                             Become a Tutor
                         </>
@@ -236,7 +236,7 @@ const TeachPage = () => {
                     {faqs.map((faq, index) => (
                         <div key={index} className="border-b border-gray-300">
                             <button
-                                className="w-full text-left py-6 px-2 flex justify-between items-center text-gray-800 hover:text-blue-600 transition"
+                                className="w-full text-left py-6 px-2 flex justify-between cusor-pointer items-center text-gray-800 hover:text-blue-600 transition"
                                 onClick={() => toggleFAQ(index)}
                             >
                                 <span className="text-lg font-medium">{faq.question}</span>

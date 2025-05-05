@@ -37,40 +37,42 @@ const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
     e.preventDefault();
     setErrorMessage(null);
 
-    if (formData.password !== formData.confirmPassword) {
-      setErrorMessage("Passwords do not match.");
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-
-    // Prepare API payload
-    const userData = {
+    // Convert form data to URL-encoded format
+    const formPayload = {
       firstname: formData.firstname,
       lastname: formData.lastname,
       email: formData.email,
       phone: formData.phone,
       password: formData.password,
       password_confirmation: formData.confirmPassword,
+      role: formData.role
     };
 
-    let response;
+    setLoading(true);
 
-    if (formData.role === "student") {
-      response = await createUser(userData);
-    } else {
-      response = await registerInstructor(userData);
+    try {
+      const response = formData.role === "student"
+        ? await createUser(formPayload)
+        : await registerInstructor(formPayload);
+
+      if (response?.status) {
+        // Success case
+        localStorage.setItem("authToken", response.token ?? "");
+        onSignupSuccess(formData.email);
+      } else {
+        // Handle validation errors
+        if (response?.errors?.email) {
+          setErrorMessage(response.errors.email[0]);
+        } else {
+          setErrorMessage(response?.message || "Signup failed. Please try again.");
+        }
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      setErrorMessage("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    if (response && response.status) {
-      localStorage.setItem("authToken", response.token ?? "");
-      onSignupSuccess(formData.email);
-    } else {
-      setErrorMessage(response?.message || "Signup failed. Please try again.");
-    }
-
-    setLoading(false);
   };
 
   return (
@@ -78,7 +80,7 @@ const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
       <div className="bg-white rounded-lg shadow-lg w-full max-w-xl flex overflow-hidden">
         <div className="w-full p-6 relative">
           {/* Close Button */}
-          <button className="absolute top-4 right-4 text-2xl text-gray-600" onClick={onClose}>
+          <button className="absolute top-4 right-4 cusor-pointer text-2xl text-gray-600" onClick={onClose}>
             <FiX />
           </button>
 
@@ -92,6 +94,7 @@ const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
           </p>
 
           {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
+
 
           <form className="space-y-2 mt-10 text-sm" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -166,12 +169,12 @@ const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
                   required
                 />
               </div>
-            </div>
+          </div>
 
            
             {/* Terms & Conditions */}
             <div className="flex items-center space-x-2 pt-4">
-              <input type="checkbox" className="w-4 h-4" required />
+              <input type="checkbox" className="w-4 h-4 cusor-pointer" required />
               <span className="text-sm text-gray-600">
                 By ticking this box, you agree to our{" "}
                 <a href="#" className="text-[#88D613]">Terms and Conditions</a> and{" "}
@@ -179,10 +182,10 @@ const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
               </span>
             </div>
 
-            <div className="pt-6">
+            <div className="pt-6 cusor-pointer">
               <button
                 type="submit"
-                className="w-full bg-[#1B09A2] text-white p-3 rounded-lg"
+                className="w-full bg-[#1B09A2] text-white p-3 cusor-pointer rounded-lg"
                 disabled={loading}
               >
                 {loading ? "Signing Up..." : "Sign Up"}
@@ -193,7 +196,7 @@ const SignupModal = ({ onClose, onSwitchToLogin, onSignupSuccess }: {
           {/* Toggle to Sign In */}
           <p className="text-center text-sm mt-4">
             Already have an account?{" "}
-            <button className="text-blue-600" onClick={onSwitchToLogin}>
+            <button className="text-blue-600 cusor-pointer" onClick={onSwitchToLogin}>
               Sign In
             </button>
           </p>

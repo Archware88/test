@@ -230,7 +230,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                                             e.stopPropagation();
                                             removeImage();
                                         }}
-                                        className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md"
+                                        className="absolute top-2 cusor-pointer right-2 bg-white p-1 rounded-full shadow-md"
                                     >
                                         <FiX className="text-red-500 text-lg" />
                                     </button>
@@ -257,7 +257,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                                 {/* Select Photo Button (pushed to end) */}
                                 <button
                                     onClick={() => imageInputRef.current?.click()}
-                                    className="ml-auto px-4 py-2 bg-[#1B09A2] text-white rounded text-sm"
+                                    className="ml-auto px-4 py-2 bg-[#1B09A2] cusor-pointer text-white rounded text-sm"
                                 >
                                     Select Photo
                                 </button>
@@ -291,7 +291,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                                             e.stopPropagation();
                                             removeVideo();
                                         }}
-                                        className="absolute top-2 right-2 bg-white p-1 rounded-full shadow-md"
+                                        className="absolute top-2 right-2 bg-white p-1 cusor-pointer rounded-full shadow-md"
                                     >
                                         <FiX className="text-red-500 text-lg" />
                                     </button>
@@ -315,7 +315,7 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                             />
                             <button
                                 onClick={() => videoInputRef.current?.click()}
-                                className="mt-2 px-4 py-2 bg-[#1B09A2] text-white rounded text-sm"
+                                className="mt-2 px-4 py-2 bg-[#1B09A2] cusor-pointer text-white rounded text-sm"
                             >
                                 Upload Video
                             </button>
@@ -327,14 +327,14 @@ const CourseDetails = ({ currentStep, nextStep, prevStep }: { currentStep: numbe
                         type="button"
                         onClick={prevStep}
                         disabled={currentStep === 0}
-                        className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50"
+                        className="px-4 py-2 bg-gray-200 rounded-lg cusor-pointer disabled:opacity-50"
                     >
                         Previous
                     </button>
 
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-[#1B09A2] text-white rounded-lg disabled:opacity-50"
+                        className="px-4 py-2 bg-[#1B09A2] text-white cusor-pointer rounded-lg disabled:opacity-50"
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? "Creating..." : "Next"}

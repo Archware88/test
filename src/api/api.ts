@@ -8,39 +8,46 @@ const apiRequest = async <T>(
   headers: Record<string, string> = {}
 ): Promise<T> => {
   try {
-    // Get the Bearer token from local storage
     const token = localStorage.getItem("authToken");
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
 
-    // Do NOT set Content-Type manually for FormData (browser handles it)
     const isFormData = body instanceof FormData;
-    if (!isFormData) {
-      headers["Content-Type"] = "application/x-www-form-urlencoded";
-    }
-
     const options: RequestInit = {
       method,
-      headers: isFormData ? headers : { ...headers }, // Avoid modifying headers for FormData
+      headers: {
+        ...headers,
+        // Only set Content-Type if not FormData
+        ...(!isFormData && {
+          "Content-Type": "application/x-www-form-urlencoded",
+        }),
+      },
       body: isFormData
         ? body
         : body
         ? new URLSearchParams(body as Record<string, string>).toString()
-        : null, // FormData is used directly, others are URL-encoded
+        : null,
     };
 
     const response = await fetch(`${API_URL}${endpoint}`, options);
 
+    // Try to parse response as JSON (works for both success and error responses)
+    const responseData = await response.json().catch(() => ({}));
+
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        errorData.message || `HTTP error! status: ${response.status}`
-      );
+      // Throw an error with the full response data
+      throw {
+        status: response.status,
+        data: responseData,
+        message:
+          responseData.message || `HTTP error! status: ${response.status}`,
+        isApiError: true,
+      };
     }
 
-    return response.json() as Promise<T>;
-  } catch (error) {
+    return responseData as T;
+  } catch (error: unknown) {
     console.error("API Request Error:", error);
     throw error;
   }

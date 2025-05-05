@@ -46,7 +46,7 @@ const InstructorPage = () => {
         setFilteredCourses(updatedCourses);
     }, [filter, searchQuery, courses]);
 
-    if (loading) return <p className="text-center mt-10">Loading courses...</p>;
+    if (loading) return (<InstructorLayout><p className="text-center mt-10">Loading courses...</p></InstructorLayout>);
 
     return (
         <InstructorLayout>
@@ -83,7 +83,7 @@ const InstructorPage = () => {
 
                     {/* Add Course Button */}
                     <button
-                        className="bg-[#1B09A2] text-white px-4 py-2 rounded-lg"
+                        className="bg-[#1B09A2] text-white px-4 py-2 rounded-lg cusor-pointer"
                         onClick={() => router.push("/TutorDashboard/Courses/AddCourse")}
                     >
                         + Add New Course

@@ -90,8 +90,8 @@ function CourseDetails() {
   return (
     <div className="mx-auto py-[80px]">
       {/* Hero Section */}
-      <div className="bg-[#060D1E] text-white px-[80px] lg:py-12 flex flex-col md:flex-row items-center md:items-start">
-        <div className="lg:w-1/2 w-full">
+      <div className="w-full bg-[#060D1E] text-white px-[80px] lg:py-12 flex flex-col md:flex-row items-center md:items-start ">
+        <div className="lg:w-1/2 mr-4">
           <div className="text-[#88D613] text-sm">MARKETING</div>
           <h1 className="text-3xl">{course_info?.title}</h1>
           <div className="flex items-center space-x-2 text-sm mt-6">
@@ -128,24 +128,27 @@ function CourseDetails() {
               <FaClock className="mr-1" /> 4 hours
             </span>
           </div>
-          <button className="bg-[#1B09A2] text-sm text-white px-3 py-3 rounded-md mt-12">
+          <button className="bg-[#1B09A2] text-sm text-white px-3 py-3 rounded-md mt-12 cusor-pointer">
             Buy Course Now
           </button>
         </div>
-        <div className="lg:w-1/2 w-full">
+        <div className="lg:w-1/2 ml-4">
           <Image
             src={course_info?.image || "/assets/images/course-detais.svg"}
             alt="Course"
-            className="w-full h-[401px] px-30 object-cover rounded-lg mt-6 md:mt-0 md:ml-6"
-            height={1000}
-            width={1000}
+            className="w-full h-[401px] space-between object-cover rounded-lg mt-6 md:mt-0 md:ml-6"
+            width={0}
+            height={0}
+            sizes="100vw"
+            style={{ width: '100%', height: 'auto' }}
             priority
           />
         </div>
       </div>
 
-      <div className="lg:flex px-[80px] bg-[#f9f9f9]">
-        <div className="lg:w-7/12 w-full">
+      <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-[80px] bg-[#f9f9f9]">
+        {/* Main Content - Will be full width on mobile, 7/12 on lg+ */}
+        <div className="w-full lg:w-7/12 lg:pr-6">
           {/* Description */}
           <div className="mt-6 py-6 rounded-lg">
             <h2 className="text-lg font-semibold">Course Description</h2>
@@ -207,9 +210,9 @@ function CourseDetails() {
           </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="mt-6 px-40 lg:w-5/12 w-full">
-          <div className="bg-white p-6 border border-gray-300 rounded-lg mx-auto w-10/12">
+        {/* Sidebar - Will be full width on mobile, fixed width on lg+ */}
+        <div className="w-full lg:w-5/12 lg:min-w-[300px] mt-6 lg:mt-0 xl:px-24">
+          <div className="bg-white p-6 border border-gray-300 rounded-lg lg:mx-0 mx-auto lg:w-full w-11/12 mt-20">
             <h2 className="font-semibold">Instructors</h2>
             <div className="border-b border-gray-300 my-2"></div>
             <div className="mt-3 flex items-center">
@@ -234,14 +237,14 @@ function CourseDetails() {
 
           {/* Price Section */}
           <div className="mt-5">
-            <div className="bg-white p-6 border border-gray-300 rounded-lg mx-auto w-10/12">
+            <div className="bg-white p-6 border border-gray-300 rounded-lg lg:mx-0 mx-auto lg:w-full w-11/12">
               <div className="flex items-center mt-3">
                 <input
                   type="text"
                   placeholder="Have a voucher code? Input here"
                   className="border border-gray-700 p-2 rounded-bl-md rounded-tl-md w-full text-sm"
                 />
-                <button className="bg-[#1B09A2] text-white px-4 py-2 rounded-br-md rounded-tr-md text-base">
+                <button className="bg-[#1B09A2] text-white px-4 py-2 rounded-br-md rounded-tr-md text-base cusor-pointer">
                   Apply
                 </button>
               </div>
@@ -253,12 +256,12 @@ function CourseDetails() {
                 </p>
               </div>
             </div>
-            <div className="bg-white mx-auto w-10/12">
-              <button className="mt-4 bg-[#1B09A2] text-white px-4 py-3 rounded-lg w-full text-sm">
+            <div className="bg-white lg:mx-0 mx-auto lg:w-full w-11/12">
+              <button className="mt-4 bg-[#1B09A2] text-white px-4 py-3 rounded-lg w-full text-sm cusor-pointer">
                 Add Course to Cart
               </button>
               <Link href="/ShoppingCart">
-                <div className="mt-2 border border-[#1B09A2] text-[#1B09A2] px-4 py-3 rounded-lg w-full text-sm">
+                <div className="mt-2 text-center border border-[#1B09A2] text-[#1B09A2] px-4 py-3 rounded-lg w-full text-sm">
                   Buy Course Now
                 </div>
               </Link>

@@ -114,7 +114,7 @@ const ShoppingCart = () => {
                                 </div>
                                 <p className="text-lg font-bold text-[#1B09A2] pt-2">N {course.price.toLocaleString()}</p>
                             </div>
-                            <button onClick={() => removeFromCart(course.id)} className="text-[#1B09A2] hover:underline flex items-start">
+                            <button onClick={() => removeFromCart(course.id)} className="text-[#1B09A2] hover:underline flex items-start cusor-pointer">
                                 🗑 Remove from cart
                             </button>
                         </div>
@@ -137,7 +137,7 @@ const ShoppingCart = () => {
                         <span>Price</span>
                         <span>N {totalPrice.toLocaleString()}</span>
                     </div>
-                    <button className="w-full bg-blue-600 text-white py-3 mt-4 rounded-md text-center">
+                        <button className="w-full bg-blue-600 text-white py-3 mt-4 rounded-md text-center cusor-pointer">
                         Proceed to Checkout
                     </button>
                 </div>
@@ -155,7 +155,7 @@ const ShoppingCart = () => {
                                     <p className="text-sm text-gray-500">By {course.author} • {course.level}</p>
                                     <p className="text-lg font-bold text-blue-600">N {course.price.toLocaleString()}</p>
                                 </div>
-                                <button onClick={() => addToCart(course.id)} className="text-blue-600 hover:underline">
+                                <button onClick={() => addToCart(course.id)} className="text-blue-600 hover:underline cusor-pointer">
                                     ➕ Add to cart
                                 </button>
                             </div>

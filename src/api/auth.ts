@@ -7,19 +7,53 @@ import {
   IUserUpdateData,
 } from "../types/types";
 
+interface ApiError {
+  status?: number;
+  data?: {
+    message?: string;
+    errors?: {
+      email?: string[];
+      // other possible error fields
+    };
+  };
+  message?: string;
+  isApiError?: boolean;
+}
+
 // Create a new user
 export const createUser = async (
   data: IUserCreateData
-): Promise<IUserResponse | null> => {
+): Promise<IUserResponse> => {
   try {
     const response = await post<IUserResponse>("/register", data);
     return response;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Create User API error:", error);
-    return null;
+
+    // Type guard for ApiError
+    if (isApiError(error)) {
+      return {
+        status: false,
+        message: error.message || "Registration failed",
+        errors: error.data?.errors || {},
+        role: "",
+      };
+    }
+
+    // Fallback for non-API errors
+    return {
+      status: false,
+      message: "Registration failed",
+      errors: {},
+      role: ""
+    };
   }
 };
 
+// Type guard for ApiError
+function isApiError(error: unknown): error is ApiError {
+  return typeof error === "object" && error !== null && "isApiError" in error;
+}
 // Register a new instructor
 export const registerInstructor = async (
   data: IInstructorCreateData
@@ -65,5 +99,33 @@ export const updateUserProfile = async (
   } catch (error) {
     console.error("Update User API error:", error);
     return null;
+  }
+};
+
+export const logoutUser = async (): Promise<{
+  success: boolean;
+  message?: string;
+}> => {
+  try {
+    const response = await post<{ success: boolean; message?: string }>(
+      "/logout",
+      {}
+    );
+    return response;
+  } catch (error: unknown) {
+    console.error("Logout API error:", error);
+
+    // Handle different error types
+    if (isApiError(error)) {
+      return {
+        success: false,
+        message: error.message || "Logout failed",
+      };
+    }
+
+    return {
+      success: false,
+      message: "An unexpected error occurred during logout",
+    };
   }
 };

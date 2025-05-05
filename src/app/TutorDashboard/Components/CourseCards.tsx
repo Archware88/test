@@ -77,7 +77,7 @@ const CourseCard = ({
 
             {/* Action Buttons */}
             <div className="flex gap-2 ml-4">
-                <button className="p-2 border border-blue-500 rounded-md hover:bg-blue-50 transition-colors">
+                <button className="p-2 border border-blue-500 rounded-md cusor-pointer hover:bg-blue-50 transition-colors">
                     <FiEdit className="text-blue-500" />
                 </button>
                 <button className="p-2 border border-red-500 rounded-md hover:bg-red-50 transition-colors">

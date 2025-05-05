@@ -25,7 +25,7 @@ const PaymentSettings = () => {
                 </div>
 
                 {/* Add Payment Method */}
-                <button className="mt-4 border border-gray-300 p-4 w-full rounded-lg flex items-center justify-center">
+                    <button className="mt-4 border border-gray-300 p-4 w-full rounded-lg cusor-pointer flex items-center justify-center">
                     + Add new payment method
                 </button>
 
@@ -79,10 +79,10 @@ const PaymentSettings = () => {
                 <div className="flex justify-between mt-6 items-center">
                     <p>Page 1 of 30</p>
                     <div className="flex gap-2">
-                        <button className="px-3 py-1 border rounded-md">1</button>
-                        <button className="px-3 py-1 border rounded-md">2</button>
-                        <button className="px-3 py-1 border rounded-md">3</button>
-                        <button className="px-3 py-1 border rounded-md">Next</button>
+                            <button className="px-3 py-1 border rounded-md cusor-pointer">1</button>
+                            <button className="px-3 py-1 border rounded-md cusor-pointer">2</button>
+                            <button className="px-3 py-1 border rounded-md cusor-pointer">3</button>
+                            <button className="px-3 py-1 border rounded-md cusor-pointer">Next</button>
                     </div>
                 </div>
             </div>
