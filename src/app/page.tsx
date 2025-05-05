@@ -174,7 +174,7 @@ const Homepages = () => {
                 </Link>
                 <button
                   onClick={() => setIsAuthOpen(true)}
-                  className="border-2 border-[#002d72] text-sm text-[#002d72] px-10  py-2.5 rounded-md"
+                  className="border-2 border-[#002d72] text-sm text-[#002d72] px-10  py-2.5 rounded-md cursor-pointer"
                 >
                   Login
                 </button>
@@ -238,7 +238,7 @@ const Homepages = () => {
                 {/* "All" Button */}
                 <button
                   onClick={() => setSelectedCategory("All")}
-                  className={`h-[38px] px-4 py-2 rounded-md text-sm  border-black/20    whitespace-nowrap ${selectedCategory === "All" ? `bg-[#88D613] text-black` : "hover:bg-[#c9f453] border text-black/40"
+                  className={`h-[38px] px-4 py-2 rounded-md text-sm border-black/20 cusor-pointer whitespace-nowrap ${selectedCategory === "All" ? `bg-[#88D613] text-black` : "hover:bg-[#c9f453] border text-black/40"
                     }`}
                 >
                   All
@@ -251,7 +251,7 @@ const Homepages = () => {
                     <button
                       key={index}
                       onClick={() => setSelectedCategory(category.name)}
-                      className={`h-[38px] px-4 py-2 rounded-md text-sm border border-black/20   whitespace-nowrap ${selectedCategory === category.name ? `bg-[#88D613] text-black` : "hover:bg-[#c9f453] text-black/40"
+                      className={`h-[38px] px-4 py-2 rounded-md text-sm border border-black/20 cusor-pointer whitespace-nowrap ${selectedCategory === category.name ? `bg-[#88D613] text-black` : "hover:bg-[#c9f453] text-black/40"
                         }`}
                     >
                       {category.name}
@@ -328,7 +328,7 @@ const Homepages = () => {
               {faqs.map((faq, index) => (
                 <div key={index} className="border-b border-gray-300">
                   <button
-                    className="w-full text-left py-4 px-2 flex justify-between items-center text-gray-800 hover:text-blue-600 transition"
+                    className="w-full text-left py-4 px-2 flex justify-between cusor-pointer items-center text-gray-800 hover:text-blue-600 transition"
                     onClick={() => toggleFAQ(index)}
                   >
                     <span className="text-lg font-medium">{faq.question}</span>

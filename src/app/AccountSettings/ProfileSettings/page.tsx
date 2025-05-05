@@ -108,7 +108,7 @@ const AccountSettings = () => {
                             <p className="text-gray-700 text-sm">This image will be displayed on your profile</p>
                             <button
                                 type="button"
-                                className="mt-2 px-4 py-2 bg-[#1B09A2] text-white rounded-md"
+                                className="mt-2 px-4 py-2 bg-[#1B09A2] text-white rounded-md cusor-pointer"
                                 onClick={() => fileInputRef.current?.click()}
                             >
                                 Change Photo
@@ -179,7 +179,7 @@ const AccountSettings = () => {
                             />
                         </div>
 
-                        <button type="submit" className="mt-6 px-6 py-2 bg-[#1B09A2] text-white rounded-md">
+                        <button type="submit" className="mt-6 px-6 py-2 bg-[#1B09A2] text-white rounded-md cusor-pointer">
                             Save Changes
                         </button>
                     </form>

@@ -54,7 +54,7 @@ const VerifyEmailModal: React.FC<VerifyEmailModalProps> = ({
         {/* Right Side */}
         <div className="w-full p-6 relative">
           {/* Close Button */}
-          <button className="absolute top-4 right-4 text-2xl text-gray-600" onClick={onClose}>
+          <button className="absolute top-4 right-4 text-2xl cusor-pointer text-gray-600" onClick={onClose}>
             <FiX />
           </button>
 
@@ -81,7 +81,7 @@ const VerifyEmailModal: React.FC<VerifyEmailModalProps> = ({
 
           {/* Verify Button */}
           <div className="pt-8">
-            <button className="w-full bg-[#1B09A2] text-white p-3 rounded-lg">Verify Email</button>
+            <button className="w-full bg-[#1B09A2] text-white p-3 cusor-pointer rounded-lg">Verify Email</button>
           </div>
 
           {/* Resend OTP Link */}
@@ -90,7 +90,7 @@ const VerifyEmailModal: React.FC<VerifyEmailModalProps> = ({
             {resendTimer > 0 ? (
               <span className="text-gray-500">Resend in {resendTimer}s</span>
             ) : (
-              <button className="text-blue-600" onClick={() => setResendTimer(30)}>
+                <button className="text-blue-600 cusor-pointer" onClick={() => setResendTimer(30)}>
                 Resend Code
               </button>
             )}
@@ -99,7 +99,7 @@ const VerifyEmailModal: React.FC<VerifyEmailModalProps> = ({
           {/* Back to Login */}
           <p className="text-center text-sm mt-4">
             Already verified?{" "}
-            <button className="text-blue-600" onClick={onSwitchToLogin}>
+            <button className="text-blue-600 cusor-pointer" onClick={onSwitchToLogin}>
               Sign In
             </button>
           </p>

@@ -51,7 +51,7 @@ const ReadMore: React.FC<ReadMoreProps> = ({
             {isTruncated && (
                 <button
                     onClick={() => setExpanded((prev) => !prev)}
-                    className="text-blue-600 hover:underline text-sm mt-2"
+                    className="text-blue-600 hover:underline text-sm mt-2 cusor-pointer"
                 >
                     {expanded ? "Read Less" : "Read More"}
                 </button>

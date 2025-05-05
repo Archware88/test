@@ -55,7 +55,7 @@ const LoginModal = ({ onClose, onSwitchToSignup }: { onClose: () => void; onSwit
     <div className="fixed inset-0 bg-[#00000099] flex items-center justify-center z-50 px-8">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-xl flex overflow-hidden">
         <div className="w-full p-6 relative">
-          <button className="absolute top-4 right-4 text-2xl text-gray-600" onClick={onClose}>
+          <button className="absolute top-4 right-4 text-2xl cusor-pointer text-gray-600" onClick={onClose}>
             <FiX />
           </button>
 
@@ -102,7 +102,7 @@ const LoginModal = ({ onClose, onSwitchToSignup }: { onClose: () => void; onSwit
             <div className="pt-6">
               <button
                 type="submit"
-                className="w-full bg-[#1B09A2] text-white p-3 rounded-lg"
+                className="w-full bg-[#1B09A2] text-white cusor-pointer p-3 rounded-lg"
                 disabled={loading}
               >
                 {loading ? "Signing In..." : "Sign In"}
@@ -116,16 +116,16 @@ const LoginModal = ({ onClose, onSwitchToSignup }: { onClose: () => void; onSwit
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
 
-          <button className="w-full flex items-center justify-center border p-3 rounded-lg mb-2">
+          {/* <button className="w-full flex items-center justify-center border p-3 rounded-lg mb-2">
             Continue with Google
           </button>
           <button className="w-full flex items-center justify-center border p-3 rounded-lg">
             Continue with Facebook
-          </button>
+          </button> */}
 
           <p className="text-center text-sm mt-4">
             Don’t have an account?{" "}
-            <button className="text-blue-600" onClick={onSwitchToSignup}>
+            <button className="text-blue-600 cusor-pointer" onClick={onSwitchToSignup}>
               Sign Up
             </button>
           </p>

@@ -3,32 +3,91 @@ import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaGlobe, FaShoppingCart, FaChevronDown } from "react-icons/fa";
 import Image from "next/image";
 import { fetchProfileInfo } from "@/api/student";
-import { IProfileInfo } from "@/types/types";
+import { fetchInstructorInfo } from "@/api/instructor";
+import { IProfileInfo, } from "@/types/types";
 import { BASE_URL } from "@/api/constants";
+import { logoutUser } from "@/api/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const UserNavbar = () => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); // Mobile menu toggle state
   const [profile, setProfile] = useState<IProfileInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isInstructor, setIsInstructor] = useState(false);
+
+  const getInitials = (firstname: string = '', lastname: string = '') => {
+    return `${firstname.charAt(0)}${lastname.charAt(0)}`.toUpperCase();
+  };
+
+  const handleLogout = async () => {
+    try {
+      const result = await logoutUser();
+
+      // Always clear localStorage, even if API call fails
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userRole');
+
+      // Additional cleanup if needed
+      localStorage.removeItem('userData');
+      sessionStorage.clear();
+
+      if (result.success) {
+        router.push('/');
+        // Force reload if needed (see note below)
+        window.location.reload();
+      } else {
+        alert(result.message || 'Logged out ');
+        router.push('/');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback cleanup if everything fails
+      localStorage.clear();
+      sessionStorage.clear();
+      router.push('/login');
+    }
+  };
 
   useEffect(() => {
     const getProfileInfo = async () => {
       setLoading(true);
-      const data = await fetchProfileInfo();
-      if (data) {
-        setProfile(data);
-      } else {
+      try {
+        // Check if user is instructor from localStorage
+        const isInstructor = localStorage.getItem('userRole') === 'instructor';
+        setIsInstructor(isInstructor);
+
+        let data;
+        if (isInstructor) {
+          data = await fetchInstructorInfo();
+        } else {
+          data = await fetchProfileInfo();
+        }
+
+        if (data) {
+          if ('email' in data) {
+            setProfile(data);
+          } else {
+            setProfile({ ...data, email: '' });
+          }
+        } else {
+          setError("Failed to load profile information.");
+        }
+      } catch (err) {
+        console.error("Profile fetch error:", err);
         setError("Failed to load profile information.");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     getProfileInfo();
   }, []);
 
+ 
   return (
     <div>
       {/* Desktop Navbar */}
@@ -78,14 +137,20 @@ const UserNavbar = () => {
                   className="flex items-center cursor-pointer"
                   onClick={() => setIsOpen(!isOpen)}
                 >
-                  <Image
-                    src={`${BASE_URL}/${profile?.profile_picture || "/assets/images/profile-image.png"}`}
-                    alt="User"
-                    className="h-10 w-10 rounded-full border"
-                    width={100}
-                    height={100}
-                    unoptimized
-                  />
+                      {profile?.profile_picture ? (
+                        <Image
+                          src={`${BASE_URL}/${profile.profile_picture}`}
+                          alt="User"
+                          className="h-10 w-10 rounded-full border"
+                          width={100}
+                          height={100}
+                          unoptimized
+                        />
+                      ) : (
+                          <div className="h-10 w-10 flex items-center justify-center rounded-full bg-[#1B09A2] text-white font-bold ">
+                          {getInitials(profile?.firstname, profile?.lastname)}
+                        </div>
+                      )}
                   <span className="ml-2 text-gray-700 text-sm">
                     Welcome, {profile?.firstname}!
                   </span>
@@ -95,55 +160,74 @@ const UserNavbar = () => {
 
               {/* Dropdown Menu */}
               {isOpen && profile && (
-                <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg  z-50 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg z-50 overflow-hidden">
                   {/* User Info */}
                   <div className="pt-4 text-center border-b border-gray-300">
-                    <Image
-                      src={`${BASE_URL}/${profile.profile_picture || "/assets/images/profile-image.png"}`}
-                      alt="User"
-                      className="h-14 w-14 rounded-full mx-auto border"
-                      width={100}
-                      height={100}
-                      unoptimized
-                    />
+                    {profile?.profile_picture ? (
+                      <Image
+                        src={`${BASE_URL}/${profile.profile_picture || "/assets/images/profile-image.png"}`}
+                        alt="User"
+                        className="h-14 w-14 rounded-full mx-auto border"
+                        width={100}
+                        height={100}
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="h-14 w-14 rounded-full text-center items-center flex justify-center mx-auto bg-[#1B09A2] text-white font-bold">
+                        {getInitials(profile?.firstname, profile?.lastname)}
+                      </div>
+                    )}
                     <p className="mt-2 pb-1">
                       {profile.firstname} {profile.lastname}
                     </p>
-                    <p className=" text-xs pb-3">{profile.email}</p>
                   </div>
 
-                  {/* Menu Items */}
-                  <div className="py-2 my-1">
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">My Courses</a>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Cart</a>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Saved Items</a>
-                  </div>
-
-                  <hr className="border-gray-300" />
-
-                  <div className="py-2">
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">Notifications</a>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">Messages</a>
-                  </div>
-
-                  <hr className="border-gray-300" />
-
-                  <div className="py-2">
-                    <a href="/AccountSettings/ProfileSettings" className="block px-4 py-2 hover:bg-gray-100">
-                      Profile Settings
-                    </a>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">Account Settings</a>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">Help and Support</a>
-                  </div>
-
-                  <hr className="border-gray-300" />
-
-                  {/* Logout Button */}
-                  <div className="pb-3">
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100 text-red-500">
-                      Log out
-                    </a>
-                  </div>
+                  {/* Conditional Menu Items */}
+                  {isInstructor ? (
+                    <>
+                      <div className="py-2">
+                        <a href="/TutorDashboard/Courses" className="block px-4 py-2 hover:bg-gray-100 border-b border-gray-300">
+                          Dashboard
+                        </a>
+                      </div>
+                      <div className="pb-3">
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500 cusor-pointer"
+                        >
+                          Log out
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="py-2">
+                      <div className=" my-1">
+                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Courses</a>
+                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Cart</a>
+                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Saved Items</a>
+                      </div>
+                      <hr className="border-gray-300" />
+                      <div className="">
+                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">Notifications</a>
+                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">Messages</a>
+                      </div>
+                      <hr className="border-gray-300" />
+                      <div className="">
+                        <a href="/AccountSettings/ProfileSettings" className="block px-4 py-2 hover:bg-gray-100">
+                          Profile Settings
+                        </a>
+                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">Account Settings</a>
+                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">Help and Support</a>
+                      </div>
+                      <hr className="border-gray-300" />
+                        <button
+                          onClick={handleLogout}
+                          className="text-red-500 hover:text-red-700 text-left py-2 px-4 cusor-pointer"
+                        >
+                          Log out
+                        </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -170,7 +254,7 @@ const UserNavbar = () => {
         </Link>
 
         {/* Hamburger Icon */}
-        <button onClick={() => setMenuOpen(!menuOpen)} className="text-gray-600 text-2xl">
+        <button onClick={() => setMenuOpen(!menuOpen)} className="text-gray-600 text-2xl cusor-pointer">
           {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>
@@ -190,7 +274,12 @@ const UserNavbar = () => {
             <a href="#" className="text-gray-600 hover:text-blue-600">Account Settings</a>
             <a href="#" className="text-gray-600 hover:text-blue-600">Help and Support</a>
             <hr />
-            <a href="#" className="text-red-500 hover:text-red-700">Log out</a>
+            <button
+              onClick={handleLogout}
+              className="text-red-500 hover:text-red-700 text-left cusor-pointer"
+            >
+              Log out
+            </button>
           </div>
         </div>
       )}

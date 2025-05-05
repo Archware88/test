@@ -10,8 +10,8 @@ const Sidebar = () => {
     const links = [
         { href: "/AccountSettings/ProfileSettings", label: "Profile Settings" },
         { href: "/AccountSettings/PaymentSettings", label: "Payment Settings" },
-        { href: "/AccountSettings/NotificationSettings", label: "Notification Settings" },
-        { href: "/AccountSettings/SecuritySettings", label: "Security Settings" },
+        // { href: "/AccountSettings/NotificationSettings", label: "Notification Settings" },
+        // { href: "/AccountSettings/SecuritySettings", label: "Security Settings" },
     ];
 
     return (

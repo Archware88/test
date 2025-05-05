@@ -109,13 +109,13 @@ const CourseStructure = ({
                             className="w-full p-2 border rounded"
                         />
                         {learningObjectives.length > 4 && (
-                            <button onClick={() => removeLearningObjective(index)} className="absolute right-2 top-2 text-red-500">
+                            <button onClick={() => removeLearningObjective(index)} className="absolute cusor-pointer right-2 top-2 text-red-500">
                                 <FiX />
                             </button>
                         )}
                     </div>
                 ))}
-                <button onClick={addLearningObjective} className="text-blue-600 flex items-center mt-2">
+                <button onClick={addLearningObjective} className="text-blue-600 flex cusor-pointer items-center mt-2">
                     <FiPlus className="mr-1" /> Add More response
                 </button>
             </div>
@@ -136,13 +136,13 @@ const CourseStructure = ({
                             className="w-full p-2 border rounded"
                         />
                         {prerequisites.length > 1 && (
-                            <button onClick={() => removePrerequisite(index)} className="absolute right-2 top-2 text-red-500">
+                            <button onClick={() => removePrerequisite(index)} className="absolute cusor-pointer right-2 top-2 text-red-500">
                                 <FiX />
                             </button>
                         )}
                     </div>
                 ))}
-                <button onClick={addPrerequisite} className="text-blue-600 flex items-center mt-2">
+                <button onClick={addPrerequisite} className="text-blue-600 flex items-center cusor-pointer mt-2">
                     <FiPlus className="mr-1" /> Add More response
                 </button>
             </div>

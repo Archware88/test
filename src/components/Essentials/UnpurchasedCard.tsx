@@ -21,27 +21,33 @@ const UnpurchasedCard = ({
   rating,
   reviews,
   price,
-  status,
+  // status,
 }: UnpurchasedCardProps) => {
   // Map status to styles
-  const statusStyles = {
-    New: "bg-[#88D613]",
-    "Best Seller": "bg-[#88D613]",
-    "Top Rated": "bg-yellow-500",
-    "Top Teacher": "bg-purple-500",
-  };
+  // const statusStyles = {
+  //   New: "bg-[#88D613]",
+  //   "Best Seller": "bg-[#88D613]",
+  //   "Top Rated": "bg-yellow-500",
+  //   "Top Teacher": "bg-purple-500",
+  // };
 
   return (
     <Link href={`/CourseDetails?course_id=${id}`}>
       <div className="bg-white shadow-sm rounded-lg overflow-hidden w-[95%] cursor-pointer hover:shadow-md transition-shadow duration-300">
         {/* Course Image */}
         <div className="relative">
-          <Image src={image || '/assets/images/course-placeholder.jpg'} alt={title} className="w-full h-[200px] object-cover" width={1000} height={1000} />
-          {status && (
+          {image ? (
+            <Image src={image} alt={title} className="w-full h-[200px] object-cover" width={1000} height={1000} />
+          ) : (
+            <div className="bg-gray-200 h-[200px] flex items-center justify-center">
+              <h3 className="text-3xl font-bold text-center">{title}</h3>
+            </div>
+          )}
+          {/* {status && (
             <span className={`absolute bottom-2 left-2 text-xs font-semibold px-3 py-1 rounded-full ${statusStyles[status]}`}>
               {status}
             </span>
-          )}
+          )} */}
         </div>
 
         {/* Course Details */}
@@ -61,7 +67,7 @@ const UnpurchasedCard = ({
             <span className="text-lg font-medium text-[#1B09A2]">
               ₦ {price.toLocaleString()}
             </span>
-            <button className="text-gray-600 text-2xl">
+            <button className="text-gray-600 text-2xl cusor-pointer">
               <FiBookmark />
             </button>
           </div>

@@ -28,7 +28,7 @@ const GuestNavbar = () => {
           {/* Hamburger Menu */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-black text-2xl"
+            className="text-black text-2xl cusor-pointer"
           >
             <FiMenu />
           </button>
@@ -63,7 +63,7 @@ const GuestNavbar = () => {
             {/* Search Icon */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="text-black text-2xl"
+              className="text-black text-2xl cusor-pointer"
             >
               {searchOpen ? <FiX /> : <FiSearch />}
             </button>
@@ -92,7 +92,7 @@ const GuestNavbar = () => {
               <div>
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className=" text-3xl"
+                  className=" text-3xl cusor-pointer"
                 >
                   <FiX />
                 </button>
@@ -119,13 +119,13 @@ const GuestNavbar = () => {
             <div className="flex flex-col items-center space-y-4 mt-auto mb-6 px-6">
               <button
                 onClick={openSignupModal}
-                className="bg-[#1B09A2] border border-[#1B09A2] text-white py-2 px-6 rounded-lg w-full text-center"
+                className="bg-[#1B09A2] border border-[#1B09A2] text-white py-2 px-6 rounded-lg w-full text-center cusor-pointer"
               >
                 Get Started
               </button>
               <button
                 onClick={() => setIsAuthOpen(true)}
-                className="border-2 border-[#1B09A2] text-[#1B09A2] py-2 px-6 rounded-lg w-full text-center"
+                className="border-2 border-[#1B09A2] text-[#1B09A2] py-2 px-6 rounded-lg w-full text-center cursor-pointer"
               >
                 Login
               </button>
@@ -175,13 +175,13 @@ const GuestNavbar = () => {
           <div>
             <button
               onClick={() => setIsAuthOpen(true)}
-              className="border-2 border-[#1B09A2] text-[#1B09A2] text-sm py-2 px-7 rounded-lg"
+              className="border-2 border-[#1B09A2] text-[#1B09A2] text-sm py-2 px-7 rounded-lg cursor-pointer"
             >
               Login
             </button>
             <button
               onClick={openSignupModal}
-              className="bg-[#1B09A2] border-2 border-[#1B09A2] text-sm text-white py-2 px-4 rounded-lg ml-4"
+              className="bg-[#1B09A2] border-2 border-[#1B09A2] text-sm text-white py-2 px-4 rounded-lg ml-4 cusor-pointer"
             >
               Get Started
             </button>

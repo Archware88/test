@@ -278,7 +278,7 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
                             </div>
 
                             <div className="mt-3 flex space-x-4 text-blue-600 text-sm">
-                                <button onClick={() => addLesson(courseModule.id)} className="flex items-center">
+                                <button onClick={() => addLesson(courseModule.id)} className="flex items-center cusor-pointer">
                                     <FiPlus className="mr-1" /> Add Lesson
                                 </button>
                             </div>
@@ -308,19 +308,19 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
                                     <div className="flex space-x-4 mt-2">
                                         <button
                                             onClick={() => setLessonContent(courseModule.id, lesson.id, "video")}
-                                            className={`border p-2 rounded text-center w-1/3 ${lesson.contentType === "video" ? "bg-blue-100" : ""}`}
+                                            className={`border p-2 rounded text-center cusor-pointer w-1/3 ${lesson.contentType === "video" ? "bg-blue-100" : ""}`}
                                         >
                                             Video
                                         </button>
                                         <button
                                             onClick={() => setLessonContent(courseModule.id, lesson.id, "article")}
-                                            className={`border p-2 rounded text-center w-1/3 ${lesson.contentType === "article" ? "bg-blue-100" : ""}`}
+                                            className={`border p-2 rounded text-center cusor-pointer w-1/3 ${lesson.contentType === "article" ? "bg-blue-100" : ""}`}
                                         >
                                             Article
                                         </button>
                                         <button
                                             onClick={() => setLessonContent(courseModule.id, lesson.id, "slides")}
-                                            className={`border p-2 rounded text-center w-1/3 ${lesson.contentType === "slides" ? "bg-blue-100" : ""}`}
+                                            className={`border p-2 rounded text-center cusor-pointer w-1/3 ${lesson.contentType === "slides" ? "bg-blue-100" : ""}`}
                                         >
                                             Slides
                                         </button>
@@ -339,7 +339,7 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
                                                 }}
                                                 required
                                             />
-                                            <button onClick={() => removeLessonContent(courseModule.id, lesson.id)} className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded">
+                                            <button onClick={() => removeLessonContent(courseModule.id, lesson.id)} className="absolute top-0 right-0 bg-red-500 text-white p-1 cusor-pointer rounded">
                                                 <FiX />
                                             </button>
                                         </div>
@@ -354,7 +354,7 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
                                                 onChange={(e) => updateArticleContent(courseModule.id, lesson.id, e.target.value)}
                                                 required
                                             ></textarea>
-                                            <button onClick={() => removeLessonContent(courseModule.id, lesson.id)} className="mt-2 bg-red-500 text-white p-1 rounded">
+                                            <button onClick={() => removeLessonContent(courseModule.id, lesson.id)} className="mt-2 bg-red-500 text-white p-1 cusor-pointer rounded">
                                                 Remove
                                             </button>
                                         </div>
@@ -373,7 +373,7 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
                                                 }}
                                                 required
                                             />
-                                            <button onClick={() => removeLessonContent(courseModule.id, lesson.id)} className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded">
+                                            <button onClick={() => removeLessonContent(courseModule.id, lesson.id)} className="absolute top-0 right-0 bg-red-500 text-white p-1 cusor-pointer rounded">
                                                 <FiX />
                                             </button>
                                         </div>
@@ -388,7 +388,7 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
             <button
                 onClick={addModule}
                 disabled={isSaving}
-                className="mt-4 px-4 py-2 bg-[#1B09A2] text-white rounded flex items-center disabled:opacity-50"
+                className="mt-4 px-4 py-2 cusor-pointer bg-[#1B09A2] text-white rounded flex items-center disabled:opacity-50"
             >
                 {isSaving ? "Saving..." : (
                     <>
@@ -400,7 +400,7 @@ const CourseContent = ({ nextStep }: { currentStep: number, nextStep: () => void
             <button
                 onClick={nextStep}
                 disabled={isSaving}
-                className="mt-4 ml-4 px-4 py-2 bg-green-600 text-white rounded flex items-center disabled:opacity-50"
+                className="mt-4 ml-4 px-4 py-2 cusor-pointer bg-green-600 text-white rounded flex items-center disabled:opacity-50"
             >
                 Next
             </button>
