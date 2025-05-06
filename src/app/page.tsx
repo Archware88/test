@@ -264,7 +264,8 @@ const Homepages = () => {
               {loadingCourses ? (
                 <p>Loading courses...</p>
               ) : courses.length > 0 ? (
-                <Slider {...settings}>
+                courses.length <= 4 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {courses.map((course) => (
                       <UnpurchasedCard
                         key={course.id}
@@ -278,7 +279,24 @@ const Homepages = () => {
                         status={course.status ?? "New"}
                       />
                     ))}
-                </Slider>
+                  </div>
+                ) : (
+                  <Slider {...settings}>
+                    {courses.map((course) => (
+                      <UnpurchasedCard
+                        key={course.id}
+                        id={course.id}
+                        image={course.image ?? ''}
+                        title={course.title}
+                        authors={[course.instructors ?? "no one"]}
+                        rating={course.rating ?? 0}
+                        reviews={course.reviews ?? 0}
+                        price={course.courseprices?.[0]?.course_price ?? 0}
+                        status={course.status ?? "New"}
+                      />
+                    ))}
+                  </Slider>
+                )
               ) : (
                 <p>No courses available in this category.</p>
               )}

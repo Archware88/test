@@ -15,6 +15,7 @@ import Image from "next/image";
 import ReadMore from "@/components/GeneralComponents/ReadMore";
 import Layout from "@/components/GeneralComponents/GeneralLayout";
 import Link from "next/link";
+import Footer from "@/components/GeneralComponents/Footer";
 
 // Wrapper component to handle Suspense
 export default function CoursePage() {
@@ -90,8 +91,8 @@ function CourseDetails() {
   return (
     <div className="mx-auto py-[80px]">
       {/* Hero Section */}
-      <div className="w-full bg-[#060D1E] text-white px-[80px] lg:py-12 flex flex-col md:flex-row items-center md:items-start ">
-        <div className="lg:w-1/2 mr-4">
+      <div className="w-full bg-[#060D1E] text-white px-[80px] lg:py-12 py-8 flex flex-col lg:flex-row items-center md:items-start ">
+        <div className="lg:w-1/2 ">
           <div className="text-[#88D613] text-sm">MARKETING</div>
           <h1 className="text-3xl">{course_info?.title}</h1>
           <div className="flex items-center space-x-2 text-sm mt-6">
@@ -132,11 +133,11 @@ function CourseDetails() {
             Buy Course Now
           </button>
         </div>
-        <div className="lg:w-1/2 ml-4">
+        <div className="lg:w-1/2 xl:px-20 lg:px-0">
           <Image
             src={course_info?.image || "/assets/images/course-detais.svg"}
             alt="Course"
-            className="w-full h-[401px] space-between object-cover rounded-lg mt-6 md:mt-0 md:ml-6"
+            className="w-full h-[401px] space-between object-cover rounded-lg mt-6  lg:ml-6"
             width={0}
             height={0}
             sizes="100vw"
@@ -269,6 +270,7 @@ function CourseDetails() {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }
