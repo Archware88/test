@@ -15,7 +15,6 @@ import {
 } from "@/api/courses";
 import { ICategory, ICourse } from "@/types/types";
 import FeaturesGrid from "@/components/HomeComponents/FeatureGrid";
-import Footer from "@/components/GeneralComponents/Footer";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import Link from "next/link";
 import AuthContainer from "@/components/AuthComponents/AuthContainer";
