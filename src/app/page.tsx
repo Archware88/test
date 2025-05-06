@@ -363,7 +363,6 @@ const Homepages = () => {
           </section>
 
           {/* <Footer /> */}
-          <Footer />
         </div>
         {isAuthOpen && <AuthContainer onClose={() => setIsAuthOpen(false)} />}
       </Layout>
