@@ -147,8 +147,8 @@ const TeachPage = () => {
                         src="/assets/images/container.svg"
                         alt="Gbolahan Adekoya"
                         className="w-32 h-32 rounded-full  object-cover shadow-lg"
-                        width={128}
-                        height={128}
+                        width={1280}
+                        height={1280}
                     />
                 </div>
 

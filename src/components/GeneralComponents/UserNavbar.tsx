@@ -202,8 +202,8 @@ const UserNavbar = () => {
                   ) : (
                     <div className="py-2">
                       <div className=" my-1">
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Courses</a>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Cart</a>
+                        <a href="/MyCourses" className="block px-4 py-2 hover:bg-gray-100">My Courses</a>
+                        <a href="/ShoppingCart" className="block px-4 py-2 hover:bg-gray-100">My Cart</a>
                         <a href="#" className="block px-4 py-2 hover:bg-gray-100">My Saved Items</a>
                       </div>
                       <hr className="border-gray-300" />
