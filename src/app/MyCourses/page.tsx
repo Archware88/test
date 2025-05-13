@@ -6,7 +6,8 @@ import PurchasedCard from "@/components/Essentials/PurchasedCards";
 import UserNavbar from "@/components/GeneralComponents/UserNavbar";
 import { fetchCategories, fetchAllCourses, fetchCoursesByCategory } from "@/api/courses";
 import { ICourse, ICategory } from "@/types/types";
-import AuthLayout from "@/components/GeneralComponents/AuthLayout";
+// import AuthLayout from "@/components/GeneralComponents/AuthLayout";
+import Layout from "@/components/GeneralComponents/GeneralLayout";
 import SkeletonLoader from "@/components/GeneralComponents/SkeletonLoader";
 
 const MyCourses = () => {
@@ -59,7 +60,7 @@ const MyCourses = () => {
     );
 
     return (
-        <AuthLayout>
+        <Layout>
             <div>
                 <UserNavbar />
                 <div className="lg:px-[120px] pt-32">
@@ -129,7 +130,7 @@ const MyCourses = () => {
                     )}
                 </div>
             </div>
-        </AuthLayout>
+        </Layout>
     );
 };
 
