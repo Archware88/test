@@ -15,7 +15,6 @@ import Image from "next/image";
 import ReadMore from "@/components/GeneralComponents/ReadMore";
 import Layout from "@/components/GeneralComponents/GeneralLayout";
 import Link from "next/link";
-import Footer from "@/components/GeneralComponents/Footer";
 
 // Wrapper component to handle Suspense
 export default function CoursePage() {
@@ -129,7 +128,7 @@ function CourseDetails() {
               <FaClock className="mr-1" /> 4 hours
             </span>
           </div>
-          <button className="bg-[#1B09A2] text-sm text-white px-3 py-3 rounded-md mt-12 cusor-pointer">
+          <button className="bg-[#1B09A2] lg:w-fit w-full text-sm text-white px-3 py-3 rounded-md mt-12 cusor-pointer">
             Buy Course Now
           </button>
         </div>
@@ -270,7 +269,6 @@ function CourseDetails() {
           </div>
         </div>
       </div>
-      <Footer/>
     </div>
   );
 }
