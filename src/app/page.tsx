@@ -28,6 +28,26 @@ const settings = {
   autoplay: false,
   autoplaySpeed: 2000,
   arrows: true,
+  responsive: [
+    {
+      breakpoint: 1024, // for tablets
+      settings: {
+        slidesToShow: 3,
+      },
+    },
+    {
+      breakpoint: 768, // for mobile
+      settings: {
+        slidesToShow: 2,
+      },
+    },
+    {
+      breakpoint: 480, // small mobile
+      settings: {
+        slidesToShow: 1,
+      },
+    },
+  ],
 };
 
 const faqs = [
