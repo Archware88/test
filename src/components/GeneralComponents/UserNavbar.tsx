@@ -2,8 +2,6 @@
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaGlobe, FaShoppingCart, FaChevronDown } from "react-icons/fa";
 import Image from "next/image";
-import { fetchProfileInfo } from "@/api/student";
-import { fetchInstructorInfo } from "@/api/instructor";
 import { IProfileInfo, } from "@/types/types";
 import { BASE_URL } from "@/api/constants";
 import { logoutUser } from "@/api/auth";
@@ -53,41 +51,28 @@ const UserNavbar = () => {
   };
 
   useEffect(() => {
-    const getProfileInfo = async () => {
-      setLoading(true);
-      try {
-        // Check if user is instructor from localStorage
-        const isInstructor = localStorage.getItem('userRole') === 'instructor';
-        setIsInstructor(isInstructor);
+    setLoading(true);
+    try {
+      const role = localStorage.getItem("userRole");
+      const userData = localStorage.getItem("userData");
 
-        let data;
-        if (isInstructor) {
-          data = await fetchInstructorInfo();
-        } else {
-          data = await fetchProfileInfo();
-        }
-
-        if (data) {
-          if ('email' in data) {
-            setProfile(data);
-          } else {
-            setProfile({ ...data, email: '' });
-          }
-        } else {
-          setError("Failed to load profile information.");
-        }
-      } catch (err) {
-        console.error("Profile fetch error:", err);
-        setError("Failed to load profile information.");
-      } finally {
-        setLoading(false);
+      if (role) {
+        setIsInstructor(role === "instructor");
       }
-    };
 
-    getProfileInfo();
+      if (userData) {
+        const parsedData = JSON.parse(userData);
+        setProfile(parsedData);
+      } else {
+        setError("No user data found. Please log in again.");
+      }
+    } catch (err) {
+      console.error("Error loading profile from localStorage:", err);
+      setError("Failed to load profile information.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
-
- 
   return (
     <div>
       {/* Desktop Navbar */}
