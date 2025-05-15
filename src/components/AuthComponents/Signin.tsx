@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FiX } from "react-icons/fi";
 import { loginUser } from "@/api/auth";
+import { fetchProfileInfo } from "@/api/student";
+import { fetchInstructorInfo } from "@/api/instructor";
 
 const LoginModal = ({ onClose, onSwitchToSignup }: { onClose: () => void; onSwitchToSignup: () => void }) => {
   const router = useRouter(); // Initialize router
@@ -34,6 +36,22 @@ const LoginModal = ({ onClose, onSwitchToSignup }: { onClose: () => void; onSwit
       // Store token and role in localStorage
       localStorage.setItem("authToken", response.token ?? "");
       localStorage.setItem("userRole", response.role ?? "student");
+
+      try {
+        let profileData;
+        if (response.role === "instructor") {
+          profileData = await fetchInstructorInfo();
+        } else {
+          profileData = await fetchProfileInfo();
+        }
+
+        if (profileData) {
+          const formattedProfile = 'email' in profileData ? profileData : { ...profileData, email: '' };
+          localStorage.setItem("userData", JSON.stringify(formattedProfile));
+        }
+      } catch (err) {
+        console.error("Error fetching user profile after login:", err);
+      }
 
       setMessage("Login successful!");
 
