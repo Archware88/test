@@ -7,8 +7,10 @@ import { BASE_URL } from "@/api/constants";
 import { logoutUser } from "@/api/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/contexts/CartContext";
 
 const UserNavbar = () => {
+  const { cartCount } = useCart();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); // Mobile menu toggle state
@@ -18,9 +20,10 @@ const UserNavbar = () => {
   const [isInstructor, setIsInstructor] = useState(false);
 
   const getInitials = (firstname: string = '', lastname: string = '') => {
-    return `${firstname.charAt(0)}${lastname.charAt(0)}`.toUpperCase();
+    return `${firstname.charAt(0)}${lastname.charAt(0)}`.toUpperCase()
   };
 
+  console.log(profile)
   const handleLogout = async () => {
     try {
       const result = await logoutUser();
@@ -219,7 +222,16 @@ const UserNavbar = () => {
 
             {/* Icons */}
             <FaGlobe className="text-gray-600 text-lg cursor-pointer" />
-            <FaShoppingCart className="text-gray-600 text-lg cursor-pointer" />
+            <div className="relative">
+              <Link href="/ShoppingCart" className="text-gray-600 hover:text-blue-600">
+                <FaShoppingCart className="text-xl" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+            </div>
           </div>
         </nav>
       </div>
@@ -248,16 +260,23 @@ const UserNavbar = () => {
       {menuOpen && (
         <div className="md:hidden absolute top-16 left-0 w-full bg-white shadow-lg border-t border-gray-300 z-50">
           <div className="p-4 flex flex-col space-y-3">
-            <a href="/AllCourses" className="text-gray-600 hover:text-blue-600">Explore Categories</a>
-            <a href="/Tutor/Home" className="text-gray-600 hover:text-blue-600">Become a Tutor</a>
+            <Link href="/AllCourses" className="text-gray-600 hover:text-blue-600">Explore Categories</Link>
+            <Link href="/Tutor/Home" className="text-gray-600 hover:text-blue-600">Become a Tutor</Link>
             <hr />
-            <a href="#" className="text-gray-600 hover:text-blue-600">My Courses</a>
-            <a href="#" className="text-gray-600 hover:text-blue-600">My Cart</a>
-            <a href="#" className="text-gray-600 hover:text-blue-600">My Saved Items</a>
+            <Link href="#" className="text-gray-600 hover:text-blue-600">My Courses</Link>
+            <Link href="/ShoppingCart" className="text-gray-600 hover:text-blue-600 flex items-center">
+              My Cart
+              {cartCount > 0 && (
+                <span className="ml-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+            <Link href="#" className="text-gray-600 hover:text-blue-600">My Saved Items</Link>
             <hr />
-            <a href="/AccountSettings/ProfileSettings" className="text-gray-600 hover:text-blue-600">Profile Settings</a>
-            <a href="#" className="text-gray-600 hover:text-blue-600">Account Settings</a>
-            <a href="#" className="text-gray-600 hover:text-blue-600">Help and Support</a>
+            <Link href="/AccountSettings/ProfileSettings" className="text-gray-600 hover:text-blue-600">Profile Settings</Link>
+            <Link href="#" className="text-gray-600 hover:text-blue-600">Account Settings</Link>
+            <Link href="#" className="text-gray-600 hover:text-blue-600">Help and Support</Link>
             <hr />
             <button
               onClick={handleLogout}
