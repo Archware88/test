@@ -109,6 +109,8 @@ export interface ICourse {
   student_count?: number;
   data: string;
   courseprices?: { course_price: number }[];
+  level?: string;
+  updated?: string;
 }
 
 export interface ICategory {
@@ -143,6 +145,8 @@ export interface ICourseInfo {
   image: string;
   status: string;
   instructor_id: number;
+  courseprices: { course_price: number }[];
+  description: string;
 }
 
 export interface ILesson {
@@ -167,3 +171,36 @@ export interface ICourseDetailsResponse {
   curriculum_details: ISection[];
 }
 
+export interface ICartItem {
+  id?: string | number; // Unique cart item ID
+  course?: ICourse;    // The course details
+  quantity?: number;   // Default 1, but allows for future expansion
+  added_at?: string;   // ISO 8601 date string
+  price_at_addition?: number; // Snapshot of price when added
+  title?: string;
+  image?: string;
+  average_rating?: number;
+  students_count?: number;
+  courseprices?: { course_price: number }[];
+}
+
+// Optional: Cart summary interface
+export interface ICartSummary {
+  subtotal: number;
+  discount: number;
+  tax: number;
+  total: number;
+  item_count: number;
+}
+
+// Optional: Full cart response
+export interface ICartResponse {
+  items: ICartItem[];
+  summary: ICartSummary;
+  expires_at?: string; // For cart expiration functionality
+}
+
+export interface SavedItem {
+  id: number;
+  course_id: number;
+}

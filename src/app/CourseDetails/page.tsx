@@ -1,7 +1,8 @@
 "use client";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { fetchCourseDetails } from "@/api/courses";
+import { fetchCourseDetails} from "@/api/courses";
+import { addToCart } from "@/api/cart";
 import { ISection, ILesson, ICourseDetailsResponse } from "@/types/types";
 import {
   FaCheckCircle,
@@ -15,6 +16,9 @@ import Image from "next/image";
 import ReadMore from "@/components/GeneralComponents/ReadMore";
 import Layout from "@/components/GeneralComponents/GeneralLayout";
 import Link from "next/link";
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { useCart } from "@/contexts/CartContext";
 
 // Wrapper component to handle Suspense
 export default function CoursePage() {
@@ -29,16 +33,41 @@ export default function CoursePage() {
 
 // Main course details component
 function CourseDetails() {
+  const { updateCartCount } = useCart();
   const [expanded, setExpanded] = useState<number | null>(null);
   const [data, setData] = useState<ICourseDetailsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [addingToCart, setAddingToCart] = useState(false);
 
   const searchParams = useSearchParams();
   const courseId = searchParams.get("course_id");
 
   const toggleSection = (index: number) => {
     setExpanded(expanded === index ? null : index);
+  };
+
+  const handleAddToCart = async () => {
+    if (!courseId) {
+      toast.error("No course selected");
+      return;
+    }
+
+    setAddingToCart(true);
+    try {
+      const success = await addToCart(Number(courseId));
+      if (success) {
+        await updateCartCount();
+        toast.success("Course added to cart successfully!");
+      } else {
+        toast.error("Failed to add course to cart");
+      }
+    } catch (err) {
+      toast.error("An error occurred while adding to cart");
+      console.error("Add to cart error:", err);
+    } finally {
+      setAddingToCart(false);
+    }
   };
 
   useEffect(() => {
@@ -89,9 +118,14 @@ function CourseDetails() {
 
   return (
     <div className="mx-auto py-[80px]">
+      {/* Toast container for notifications */}
+      <div className="toast-container">
+        <ToastContainer position="top-right" autoClose={3000} />
+      </div>
+
       {/* Hero Section */}
-      <div className="w-full bg-[#060D1E] text-white px-[80px] lg:py-12 py-8 flex flex-col lg:flex-row items-center md:items-start ">
-        <div className="lg:w-1/2 ">
+      <div className="w-full bg-[#060D1E] text-white px-[80px] lg:py-12 py-8 flex flex-col lg:flex-row items-center md:items-start">
+        <div className="lg:w-1/2">
           <div className="text-[#88D613] text-sm">MARKETING</div>
           <h1 className="text-3xl">{course_info?.title}</h1>
           <div className="flex items-center space-x-2 text-sm mt-6">
@@ -128,15 +162,20 @@ function CourseDetails() {
               <FaClock className="mr-1" /> 4 hours
             </span>
           </div>
-          <button className="bg-[#1B09A2] lg:w-fit w-full text-sm text-white px-3 py-3 rounded-md mt-12 cusor-pointer">
-            Buy Course Now
+          <button
+            onClick={handleAddToCart}
+            disabled={addingToCart}
+            className={`bg-[#1B09A2] lg:w-fit w-full text-sm text-white px-3 py-3 rounded-md mt-12 ${addingToCart ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer hover:bg-blue-700'
+              }`}
+          >
+            {addingToCart ? 'Adding to Cart...' : 'Buy Course Now'}
           </button>
         </div>
         <div className="lg:w-1/2 xl:px-20 lg:px-0">
           <Image
             src={course_info?.image || "/assets/images/course-detais.svg"}
             alt="Course"
-            className="w-full h-[401px] space-between object-cover rounded-lg mt-6  lg:ml-6"
+            className="w-full h-[401px] space-between object-cover rounded-lg mt-6 lg:ml-6"
             width={0}
             height={0}
             sizes="100vw"
@@ -147,14 +186,14 @@ function CourseDetails() {
       </div>
 
       <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-[80px] bg-[#f9f9f9]">
-        {/* Main Content - Will be full width on mobile, 7/12 on lg+ */}
+        {/* Main Content */}
         <div className="w-full lg:w-7/12 lg:pr-6">
           {/* Description */}
           <div className="mt-6 py-6 rounded-lg">
             <h2 className="text-lg font-semibold">Course Description</h2>
             <div className="text-gray-600 mt-2">
               <ReadMore
-                html={course_info?.subtitle || "No description provided."}
+                html={course_info?.description || course_info?.subtitle || "No description provided."}
                 wordLimit={40}
                 className="text-sm"
               />
@@ -210,7 +249,7 @@ function CourseDetails() {
           </div>
         </div>
 
-        {/* Sidebar - Will be full width on mobile, fixed width on lg+ */}
+        {/* Sidebar */}
         <div className="w-full lg:w-5/12 lg:min-w-[300px] mt-6 lg:mt-0 xl:px-24">
           <div className="bg-white p-6 border border-gray-300 rounded-lg lg:mx-0 mx-auto lg:w-full w-11/12 mt-20">
             <h2 className="font-semibold">Instructors</h2>
@@ -244,7 +283,7 @@ function CourseDetails() {
                   placeholder="Have a voucher code? Input here"
                   className="border border-gray-700 p-2 rounded-bl-md rounded-tl-md w-full text-sm"
                 />
-                <button className="bg-[#1B09A2] text-white px-4 py-2 rounded-br-md rounded-tr-md text-base cusor-pointer">
+                <button className="bg-[#1B09A2] text-white px-4 py-2 rounded-br-md rounded-tr-md text-base cursor-pointer hover:bg-blue-700">
                   Apply
                 </button>
               </div>
@@ -252,16 +291,21 @@ function CourseDetails() {
               <div className="flex justify-between items-center">
                 <p className="text-lg font-bold text-[#1B09A2]">Price</p>
                 <p className="text-lg font-semibold text-[#1B09A2]">
-                  N 30,000
+                  N {course_info?.courseprices?.[0]?.course_price?.toLocaleString() ?? '30,000'}
                 </p>
               </div>
             </div>
             <div className="bg-white lg:mx-0 mx-auto lg:w-full w-11/12">
-              <button className="mt-4 bg-[#1B09A2] text-white px-4 py-3 rounded-lg w-full text-sm cusor-pointer">
-                Add Course to Cart
+              <button
+                onClick={handleAddToCart}
+                disabled={addingToCart}
+                className={`mt-4 bg-[#1B09A2] text-white px-4 py-3 rounded-lg w-full text-sm ${addingToCart ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer hover:bg-blue-700'
+                  }`}
+              >
+                {addingToCart ? 'Adding to Cart...' : 'Add Course to Cart'}
               </button>
               <Link href="/ShoppingCart">
-                <div className="mt-2 text-center border border-[#1B09A2] text-[#1B09A2] px-4 py-3 rounded-lg w-full text-sm">
+                <div className="mt-2 text-center border border-[#1B09A2] text-[#1B09A2] px-4 py-3 rounded-lg w-full text-sm hover:bg-[#1B09A2] hover:text-white transition-colors cursor-pointer">
                   Buy Course Now
                 </div>
               </Link>

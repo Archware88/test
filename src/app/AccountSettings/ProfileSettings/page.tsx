@@ -76,6 +76,17 @@ const AccountSettings = () => {
             const response = await updateUserProfile(formData);
             if (response) {
                 alert("Profile updated successfully!");
+
+                // 🔁 Re-fetch latest user data from server
+                const updatedProfile = await fetchProfileInfo();
+                if (updatedProfile && typeof updatedProfile === "object") {
+                    const formattedProfile = {
+                        ...updatedProfile,
+                        email: "email" in updatedProfile && updatedProfile.email ? updatedProfile.email : "",
+                    };
+
+                    localStorage.setItem("userData", JSON.stringify(formattedProfile));
+                }
             } else {
                 alert("Failed to update profile.");
             }
@@ -84,6 +95,7 @@ const AccountSettings = () => {
             alert("An error occurred while updating your profile.");
         }
     };
+
 
     return (
         <Layout>
@@ -96,7 +108,13 @@ const AccountSettings = () => {
                     {/* Profile Photo Section */}
                     <div className="flex items-center gap-4">
                         <Image
-                            src={previewImage ? `${BASE_URL}/${previewImage}` : "/profile-photo.jpg"}
+                            src={
+                                previewImage?.startsWith('data:image')
+                                    ? previewImage
+                                    : previewImage
+                                        ? `${BASE_URL}/${previewImage}`
+                                        : "/profile-photo.jpg"
+                            }
                             alt="Profile Photo"
                             width={80}
                             height={80}

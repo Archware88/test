@@ -13,7 +13,7 @@ const PurchasedCard = ({ image, title, authors, rating, progress }: PurchasedCar
     <div className="bg-white shadow-md shadow-gray rounded-lg overflow-hidden">
       {/* Course Image */}
       <div>
-        <Image src={image || '/assets/images/course-placeholder.jpg'} alt={title} className="w-full h-48 object-cover" height={50} width={50} />
+        <Image src={image || '/assets/images/course-placeholder.jpg'} alt={title} className="w-full h-48 object-cover" height={350} width={350} />
       </div>
 
       {/* Course Details */}
