@@ -6,14 +6,10 @@ import Image from "next/image";
 import Layout from "@/components/GeneralComponents/GeneralLayout";
 import { fetchProfileInfo } from "@/api/student";
 import { updateUserProfile } from "@/api/auth";
-import { 
-    // IProfileInfo, 
-    IUserUpdateData 
-} from "@/types/types";
+import { IUserUpdateData } from "@/types/types";
 import { BASE_URL } from "@/api/constants";
 
-const AccountSettings = () => {
-    // const [profile, setProfile] = useState<IProfileInfo | null>(null);
+const ProfileSettings = () => {
     const [formData, setFormData] = useState<IUserUpdateData>({
         firstname: "",
         lastname: "",
@@ -24,14 +20,12 @@ const AccountSettings = () => {
         profile_picture: "",
     });
     const [previewImage, setPreviewImage] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null); // For previewing image
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Fetch profile data on mount
     useEffect(() => {
         const loadProfile = async () => {
             const userInfo = await fetchProfileInfo();
             if (userInfo) {
-                // setProfile(userInfo);
                 setFormData({
                     firstname: userInfo.firstname || "",
                     lastname: userInfo.lastname || "",
@@ -47,7 +41,6 @@ const AccountSettings = () => {
         loadProfile();
     }, []);
 
-    // Handle input changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
@@ -55,7 +48,6 @@ const AccountSettings = () => {
         });
     };
 
-    // Handle image selection and convert to Base64
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -69,23 +61,18 @@ const AccountSettings = () => {
         }
     };
 
-    // Handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const response = await updateUserProfile(formData);
             if (response) {
                 alert("Profile updated successfully!");
-
-                // 🔁 Re-fetch latest user data from server
                 const updatedProfile = await fetchProfileInfo();
-                if (updatedProfile && typeof updatedProfile === "object") {
-                    const formattedProfile = {
+                if (updatedProfile) {
+                    localStorage.setItem("userData", JSON.stringify({
                         ...updatedProfile,
-                        email: "email" in updatedProfile && updatedProfile.email ? updatedProfile.email : "",
-                    };
-
-                    localStorage.setItem("userData", JSON.stringify(formattedProfile));
+                        email: updatedProfile.email || "",
+                    }));
                 }
             } else {
                 alert("Failed to update profile.");
@@ -96,115 +83,135 @@ const AccountSettings = () => {
         }
     };
 
-
     return (
         <Layout>
-            <div className="flex  p-8">
-                {/* Sidebar */}
+            <div className="flex flex-col md:flex-row bg-gray-50 min-h-screen">
                 <Sidebar />
 
-                {/* Main Content */}
-                <div className="flex-1 bg-white p-6 mt-8">
-                    {/* Profile Photo Section */}
-                    <div className="flex items-center gap-4">
-                        <Image
-                            src={
-                                previewImage?.startsWith('data:image')
-                                    ? previewImage
-                                    : previewImage
-                                        ? `${BASE_URL}/${previewImage}`
-                                        : "/profile-photo.jpg"
-                            }
-                            alt="Profile Photo"
-                            width={80}
-                            height={80}
-                            className="rounded-full"
-                            unoptimized
-                        />
-                        <div>
-                            <p className="text-gray-700">Profile Photo</p>
-                            <p className="text-gray-700 text-sm">This image will be displayed on your profile</p>
+                <div className="flex-1 p-4 md:p-8">
+                    <div className="bg-white rounded-lg shadow-sm p-6">
+                        {/* Profile Photo Section */}
+                        <div className="flex flex-col md:flex-row items-center gap-4">
+                            <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
+                                <Image
+                                    src={
+                                        previewImage?.startsWith('data:image')
+                                            ? previewImage
+                                            : previewImage
+                                                ? `${BASE_URL}/${previewImage}`
+                                                : "/profile-photo.jpg"
+                                    }
+                                    alt="Profile Photo"
+                                    width={80}
+                                    height={80}
+                                    className="w-full h-full object-cover"
+                                    unoptimized
+                                />
+                            </div>
+                            <div className="text-center md:text-left">
+                                <p className="text-gray-700">Profile Photo</p>
+                                <p className="text-gray-700 text-sm mb-2">
+                                    This image will be displayed on your profile
+                                </p>
+                                <button
+                                    type="button"
+                                    className="px-4 py-2 bg-[#1B09A2] text-white rounded-md cursor-pointer text-sm"
+                                    onClick={() => fileInputRef.current?.click()}
+                                >
+                                    Change Photo
+                                </button>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    ref={fileInputRef}
+                                    onChange={handleImageChange}
+                                    className="hidden"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Personal Information Form */}
+                        <form onSubmit={handleSubmit} className="mt-6 border-t pt-4">
+                            <h2 className="text-lg font-semibold">Personal Information</h2>
+                            <p className="text-sm text-gray-500 mb-4">
+                                Update your personal details here
+                            </p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm text-gray-700 mb-1">First Name</label>
+                                    <input
+                                        type="text"
+                                        name="firstname"
+                                        value={formData.firstname}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border rounded-md"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-700 mb-1">Last Name</label>
+                                    <input
+                                        type="text"
+                                        name="lastname"
+                                        value={formData.lastname}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border rounded-md"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-700 mb-1">Email Address</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border rounded-md"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-700 mb-1">Phone Number</label>
+                                    <input
+                                        type="tel"
+                                        name="phonenumber"
+                                        value={formData.phonenumber}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border rounded-md"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-700 mb-1">New Password</label>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border rounded-md"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-700 mb-1">Confirm Password</label>
+                                    <input
+                                        type="password"
+                                        name="password_confirmation"
+                                        value={formData.password_confirmation}
+                                        onChange={handleChange}
+                                        className="w-full p-2 border rounded-md"
+                                    />
+                                </div>
+                            </div>
+
                             <button
-                                type="button"
-                                className="mt-2 px-4 py-2 bg-[#1B09A2] text-white rounded-md cusor-pointer"
-                                onClick={() => fileInputRef.current?.click()}
+                                type="submit"
+                                className="mt-6 px-6 py-2 bg-[#1B09A2] text-white rounded-md cursor-pointer w-full md:w-auto"
                             >
-                                Change Photo
+                                Save Changes
                             </button>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                ref={fileInputRef}
-                                onChange={handleImageChange}
-                                className="hidden"
-                            />
-                        </div>
+                        </form>
                     </div>
-
-                    {/* Personal Information Form */}
-                    <form onSubmit={handleSubmit} className="mt-6 border-t pt-4">
-                        <h2 className="text-lg font-semibold">Personal Information</h2>
-                        <p className="text-sm text-gray-500">Update your personal details here</p>
-
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                            <input
-                                type="text"
-                                name="firstname"
-                                value={formData.firstname}
-                                onChange={handleChange}
-                                placeholder="First Name"
-                                className="p-2 border rounded-md"
-                            />
-                            <input
-                                type="text"
-                                name="lastname"
-                                value={formData.lastname}
-                                onChange={handleChange}
-                                placeholder="Last Name"
-                                className="p-2 border rounded-md"
-                            />
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="Email Address"
-                                className="p-2 border rounded-md"
-                            />
-                            <input
-                                type="tel"
-                                name="phonenumber"
-                                value={formData.phonenumber}
-                                onChange={handleChange}
-                                placeholder="Phone Number"
-                                className="p-2 border rounded-md"
-                            />
-                            <input
-                                type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                placeholder="New Password"
-                                className="p-2 border rounded-md"
-                            />
-                            <input
-                                type="password"
-                                name="password_confirmation"
-                                value={formData.password_confirmation}
-                                onChange={handleChange}
-                                placeholder="Confirm Password"
-                                className="p-2 border rounded-md"
-                            />
-                        </div>
-
-                        <button type="submit" className="mt-6 px-6 py-2 bg-[#1B09A2] text-white rounded-md cusor-pointer">
-                            Save Changes
-                        </button>
-                    </form>
                 </div>
             </div>
         </Layout>
     );
 };
 
-export default AccountSettings;
+export default ProfileSettings;

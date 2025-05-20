@@ -10,6 +10,16 @@ export interface IInstructorCreateData {
   expectation?: string;
 }
 
+export interface ISavedItem {
+  id: number;
+  user_id: number;
+  course_id: number;
+  created_at: string; // ISO date string
+  updated_at: string; // ISO date string
+  course: ICourse; // Expanded course details
+}
+
+
 
   export interface IInstructorInfo {
   firstname: string;
@@ -111,6 +121,7 @@ export interface ICourse {
   courseprices?: { course_price: number }[];
   level?: string;
   updated?: string;
+  category?: string;
 }
 
 export interface ICategory {
@@ -182,6 +193,7 @@ export interface ICartItem {
   average_rating?: number;
   students_count?: number;
   courseprices?: { course_price: number }[];
+  instructor?:string;
 }
 
 // Optional: Cart summary interface

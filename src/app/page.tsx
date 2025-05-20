@@ -115,6 +115,7 @@ const Homepages = () => {
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [loadingCourses, setLoadingCourses] = useState<boolean>(true);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Fetch categories when the component mounts
   useEffect(() => {
@@ -126,6 +127,12 @@ const Homepages = () => {
       setLoadingCategories(false);
     };
     loadCategories();
+  }, []);
+
+  useEffect(() => {
+    // Check authentication status
+    const authToken = localStorage.getItem('authToken');
+    setIsLoggedIn(!!authToken);
   }, []);
 
   useEffect(() => {
@@ -191,12 +198,14 @@ const Homepages = () => {
                 >
                   Browse Courses
                 </Link>
-                <button
-                  onClick={() => setIsAuthOpen(true)}
-                  className="border-2 border-[#002d72] text-sm text-[#002d72] px-10  py-2.5 rounded-md cursor-pointer"
-                >
-                  Login
-                </button>
+                {!isLoggedIn && (
+                  <button
+                    onClick={() => setIsAuthOpen(true)}
+                    className="border-2 border-[#002d72] text-sm text-[#002d72] px-10 py-2.5 rounded-md cursor-pointer"
+                  >
+                    Login
+                  </button>
+                )}
               </div>
             </div>
             <div>

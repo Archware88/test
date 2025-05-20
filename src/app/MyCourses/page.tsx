@@ -4,9 +4,8 @@ import { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import PurchasedCard from "@/components/Essentials/PurchasedCards";
 import UserNavbar from "@/components/GeneralComponents/UserNavbar";
-import { fetchCategories, fetchAllCourses, fetchCoursesByCategory } from "@/api/courses";
+import { fetchCategories, fetchStudentCourses } from "@/api/courses";
 import { ICourse, ICategory } from "@/types/types";
-// import AuthLayout from "@/components/GeneralComponents/AuthLayout";
 import Layout from "@/components/GeneralComponents/GeneralLayout";
 import SkeletonLoader from "@/components/GeneralComponents/SkeletonLoader";
 
@@ -26,7 +25,7 @@ const MyCourses = () => {
                 if (fetchedCategories) {
                     setCategories([{ id: 0, name: "All Categories" }, ...fetchedCategories]);
                 }
-                const fetchedCourses = await fetchAllCourses();
+                const fetchedCourses = await fetchStudentCourses();
                 if (fetchedCourses) setCourses(fetchedCourses);
 
             } catch (error) {
@@ -38,26 +37,20 @@ const MyCourses = () => {
         loadData();
     }, []);
 
-  
-
-    const handleCategoryChange = async (category: string, categoryId: number) => {
+    const handleCategoryChange = (category: string) => {
         setCategoryFilter(category);
-        setLoading(true);
-        try {
-            const fetchedCourses =
-                category === "All Categories"
-                    ? await fetchAllCourses()
-                    : await fetchCoursesByCategory(categoryId);
-            if (fetchedCourses) setCourses(fetchedCourses);
-        } catch (error) {
-            console.error("Error fetching courses by category:", error);
-        }
-        setLoading(false);
+        // Since we're showing only student's purchased courses,
+        // we'll filter the already fetched courses by category client-side
     };
 
-    const filteredCourses = courses.filter((course) =>
-        course.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredCourses = courses
+        .filter((course) =>
+            course.title.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .filter((course) =>
+            categoryFilter === "All Categories" ||
+            course.category === categoryFilter
+        );
 
     return (
         <Layout>
@@ -81,9 +74,7 @@ const MyCourses = () => {
                             <select
                                 className="border bg-white border-gray-300 p-2 rounded-md"
                                 value={categoryFilter}
-                                onChange={(e) =>
-                                    handleCategoryChange(e.target.value, categories.find((c) => c.name === e.target.value)?.id || 0)
-                                }
+                                onChange={(e) => handleCategoryChange(e.target.value)}
                             >
                                 {categories.map((category) => (
                                     <option key={category.id} value={category.name}>
@@ -118,11 +109,12 @@ const MyCourses = () => {
                             {filteredCourses.map((course) => (
                                 <PurchasedCard
                                     image={course.thumbnail}
-                                    authors={[]} 
+                                    authors={[]}
                                     rating={0}
                                     progress={0}
+                                    key={course.id}
                                     {...course}
-                                 key={course.id} {...course} />
+                                />
                             ))}
                         </div>
                     ) : (
