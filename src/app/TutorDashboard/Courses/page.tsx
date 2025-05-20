@@ -18,12 +18,20 @@ const InstructorPage = () => {
 
     useEffect(() => {
         const loadCourses = async () => {
-            const data = await fetchInstructorCourses();
-            if (data) {
-                setCourses(data);
-                setFilteredCourses(data);
+            try {
+                setLoading(true);
+                const data = await fetchInstructorCourses();
+                if (data) {
+                    // Filter out any courses that might have null/undefined titles
+                    const validCourses = data.filter(course => course?.title);
+                    setCourses(validCourses);
+                    setFilteredCourses(validCourses);
+                }
+            } catch (error) {
+                console.error("Error loading courses:", error);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
 
         loadCourses();
@@ -31,14 +39,17 @@ const InstructorPage = () => {
 
     // Filter and Search Logic
     useEffect(() => {
-        let updatedCourses = courses;
+        let updatedCourses = [...courses]; // Create a copy of the original array
 
         if (filter !== "All") {
-            updatedCourses = updatedCourses.filter(course => course.status === filter);
+            updatedCourses = updatedCourses.filter(course =>
+                course?.status === filter
+            );
         }
 
         if (searchQuery) {
             updatedCourses = updatedCourses.filter(course =>
+                course?.title &&
                 course.title.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
@@ -54,11 +65,11 @@ const InstructorPage = () => {
                 <h1 className="text-2xl font-bold">Courses</h1>
 
                 {/* Top Controls */}
-                <div className="flex justify-between items-center mt-4 bg-white p-4 rounded-lg shadow-sm">
-                    <div className="flex gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-4 bg-white p-4 rounded-lg shadow-sm">
+                    <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
                         {/* Filter Dropdown */}
                         <select
-                            className="border p-2 rounded-lg"
+                            className="border p-2 rounded-lg w-full md:w-auto"
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
                         >
@@ -69,11 +80,11 @@ const InstructorPage = () => {
                         </select>
 
                         {/* Search Bar */}
-                        <div className="relative">
+                        <div className="relative w-full md:w-auto">
                             <input
                                 type="text"
                                 placeholder="Search My Courses"
-                                className="border p-2 rounded-lg pl-10"
+                                className="border p-2 rounded-lg pl-10 w-full"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -83,7 +94,7 @@ const InstructorPage = () => {
 
                     {/* Add Course Button */}
                     <button
-                        className="bg-[#1B09A2] text-white px-4 py-2 rounded-lg cusor-pointer"
+                        className="bg-[#1B09A2] text-white px-4 py-2 rounded-lg cursor-pointer w-full md:w-auto"
                         onClick={() => router.push("/TutorDashboard/Courses/AddCourse")}
                     >
                         + Add New Course
@@ -95,13 +106,13 @@ const InstructorPage = () => {
                     {filteredCourses.length > 0 ? (
                         filteredCourses.map((course, index) => (
                             <CourseCard
-                                image={course.image}
-                                key={index}
-                                title={course.title}
-                                status={course.status as "Draft" | "Live" | "In Review"}
-                                students={course.student_count || 0} // Adjust based on backend data
-                                rating={course.rating || 0} // Adjust based on backend data
-                                reviews={Array.isArray(course.reviews) ? course.reviews.length : course.reviews || 0} // Adjust based on backend data
+                                key={course.id || index} // Better to use course.id if available
+                                image={course.image || "/default-course.jpg"} // Fallback image
+                                title={course.title || "Untitled Course"} // Fallback title
+                                status={course.status as "Draft" | "Live" | "In Review" || "Draft"}
+                                students={course.student_count || 0}
+                                rating={course.rating || 0}
+                                reviews={Array.isArray(course.reviews) ? course.reviews.length : course.reviews || 0}
                             />
                         ))
                     ) : (

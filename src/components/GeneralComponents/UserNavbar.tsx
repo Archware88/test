@@ -6,12 +6,12 @@ import { IProfileInfo, } from "@/types/types";
 import { BASE_URL } from "@/api/constants";
 import { logoutUser } from "@/api/auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useCart } from "@/contexts/CartContext";
 
 const UserNavbar = () => {
   const { cartCount } = useCart();
-  const router = useRouter();
+  // const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); // Mobile menu toggle state
   const [profile, setProfile] = useState<IProfileInfo | null>(null);
@@ -28,31 +28,35 @@ const UserNavbar = () => {
     try {
       const result = await logoutUser();
 
-      // Always clear localStorage, even if API call fails
+      // Clear all storage
       localStorage.removeItem('authToken');
       localStorage.removeItem('userRole');
-
-      // Additional cleanup if needed
       localStorage.removeItem('userData');
       sessionStorage.clear();
 
+      // Get current path and normalize it (remove trailing slashes)
+      const currentPath = window.location.pathname.replace(/\/+$/, '');
+
       if (result.success) {
-        router.push('/');
-        // Force reload if needed (see note below)
-        window.location.reload();
+        // If we're on home page (either "" or "/")
+        if (currentPath === '' || currentPath === '/') {
+          // Force hard reload with cache bypass
+          window.location.href = '/?logout=' + Date.now();
+        } else {
+          // Redirect to home with cache-busting parameter
+          window.location.href = '/?logout=' + Date.now();
+        }
       } else {
-        alert(result.message || 'Logged out ');
-        router.push('/');
+        alert(result.message || 'Logged out successfully');
+        window.location.href = '/';
       }
     } catch (error) {
       console.error('Logout error:', error);
-      // Fallback cleanup if everything fails
       localStorage.clear();
       sessionStorage.clear();
-      router.push('/login');
+      window.location.href = '/login';
     }
   };
-
   useEffect(() => {
     setLoading(true);
     try {
@@ -204,7 +208,7 @@ const UserNavbar = () => {
                         <a href="/AccountSettings/ProfileSettings" className="block px-4 py-2 hover:bg-gray-100">
                           Profile Settings
                         </a>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-100">Account Settings</a>
+                        {/* <a href="#" className="block px-4 py-2 hover:bg-gray-100">Account Settings</a> */}
                         <a href="#" className="block px-4 py-2 hover:bg-gray-100">Help and Support</a>
                       </div>
                       <hr className="border-gray-300" />
@@ -275,7 +279,7 @@ const UserNavbar = () => {
             <Link href="#" className="text-gray-600 hover:text-blue-600">My Saved Items</Link>
             <hr />
             <Link href="/AccountSettings/ProfileSettings" className="text-gray-600 hover:text-blue-600">Profile Settings</Link>
-            <Link href="#" className="text-gray-600 hover:text-blue-600">Account Settings</Link>
+            {/* <Link href="#" className="text-gray-600 hover:text-blue-600">Account Settings</Link> */}
             <Link href="#" className="text-gray-600 hover:text-blue-600">Help and Support</Link>
             <hr />
             <button
