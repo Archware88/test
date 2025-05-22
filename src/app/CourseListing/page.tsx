@@ -24,6 +24,22 @@ const CourseListing = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingPopular, setLoadingPopular] = useState<boolean>(true);
   const [loadingTrending, setLoadingTrending] = useState<boolean>(true);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    // Set initial value
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const loadCourses = async () => {
@@ -74,7 +90,69 @@ const CourseListing = () => {
         breakpoint: 768,
         settings: { slidesToShow: 2.2, slidesToScroll: 1 },
       },
+      {
+        breakpoint: 640,
+        settings: { slidesToShow: 1.2, slidesToScroll: 1 },
+      },
     ],
+  };
+
+  const renderCourses = (courses: ICourse[], isPurchased: boolean = false) => {
+    if (isDesktop && courses.length >= 4) {
+      return (
+        <Slider {...sliderSettings} className="mt-4">
+          {courses.map((course, index) => (
+            <div key={index} className="p-2">
+              {isPurchased ? (
+                <PurchasedCard
+                  image={course.thumbnail || null}
+                  authors={Array.isArray(course.authors) ? course.authors : [course.authors ?? ""]}
+                  rating={0}
+                  progress={0}
+                  {...course}
+                />
+              ) : (
+                <UnpurchasedCard
+                  image={course.thumbnail || null}
+                  authors={[course.instructors ?? "no one"]}
+                  rating={0}
+                  reviews={0}
+                  status="New"
+                  {...course}
+                />
+              )}
+            </div>
+          ))}
+        </Slider>
+      );
+    } else {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+          {courses.map((course, index) => (
+            <div key={index} className="p-2">
+              {isPurchased ? (
+                <PurchasedCard
+                  image={course.thumbnail || null}
+                  authors={Array.isArray(course.authors) ? course.authors : [course.authors ?? ""]}
+                  rating={0}
+                  progress={0}
+                  {...course}
+                />
+              ) : (
+                <UnpurchasedCard
+                  image={course.thumbnail || null}
+                  authors={[course.instructors ?? "no one"]}
+                  rating={0}
+                  reviews={0}
+                  status="New"
+                  {...course}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    }
   };
 
   return (
@@ -92,19 +170,7 @@ const CourseListing = () => {
           ) : purchasedCourses?.length ? (
             <div>
               <h2 className="text-2xl text-[#1B09A2]">CONTINUE LEARNING</h2>
-              <Slider {...sliderSettings} className="mt-4">
-                {purchasedCourses.map((course, index) => (
-                  <div key={index} className="p-2">
-                    <PurchasedCard
-                      image={course.thumbnail || null}
-                      authors={Array.isArray(course.authors) ? course.authors : [course.authors ?? ""]}
-                      rating={0}
-                      progress={0}
-                      {...course}
-                    />
-                  </div>
-                ))}
-              </Slider>
+              {renderCourses(purchasedCourses, true)}
             </div>
           ) : (
             <div className="md:flex items-center bg-[#88D613] text-white p-6 md:p-12 rounded-lg">
@@ -143,20 +209,7 @@ const CourseListing = () => {
               ))}
             </div>
           ) : trendingCourses?.length ? (
-            <Slider {...sliderSettings} className="mt-4">
-              {trendingCourses.map((course, index) => (
-                <div key={index} className="p-2">
-                  <UnpurchasedCard
-                    image={course.thumbnail || null}
-                    authors={[]}
-                    rating={0}
-                    reviews={0}
-                    status="New"
-                    {...course}
-                  />
-                </div>
-              ))}
-            </Slider>
+            renderCourses(trendingCourses)
           ) : (
             <p className="text-center mt-4">
               No trending courses available at the moment.
@@ -174,20 +227,7 @@ const CourseListing = () => {
               ))}
             </div>
           ) : popularCourses?.length ? (
-            <Slider {...sliderSettings} className="mt-4">
-              {popularCourses.map((course, index) => (
-                <div key={index} className="p-2">
-                  <UnpurchasedCard
-                    image={course.thumbnail}
-                    authors={[course.instructors ?? "no one"]}
-                    rating={0}
-                    reviews={0}
-                    status="New"
-                    {...course}
-                  />
-                </div>
-              ))}
-            </Slider>
+            renderCourses(popularCourses)
           ) : (
             <p className="text-center mt-4">
               No popular courses available at the moment.
