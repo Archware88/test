@@ -117,11 +117,14 @@ export interface ICourse {
   reviews?: number;
   status?: "New" | "Best Seller" | "Top Rated" | "Top Teacher";
   student_count?: number;
-  data: string;
+  data?: string | undefined;
   courseprices?: { course_price: number }[];
   level?: string;
   updated?: string;
   category?: string;
+  students_count?: number;
+  average_rating?: number;
+  course_prices?: { course_price: number }[];
 }
 
 export interface ICategory {
